@@ -1,0 +1,12 @@
+body{
+  margin:0 ;
+  padding: 0;
+}
+
+.CircularProgressbar {
+  width: 5%;
+}
+
+.react-date-picker__wrapper{
+  border: none !important;
+}
