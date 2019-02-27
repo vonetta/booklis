@@ -3,8 +3,8 @@ import { Switch, Route } from "react-router-dom";
 import BookForm from "./componenets/bookForm";
 import BookList from "./componenets/bookList";
 import Nav from "./componenets/nav"
-import "./custom.css";
 import "../node_modules/bootstrap/dist/css/bootstrap.css";
+import "./custom.css";
 
 class App extends Component {
   render() {

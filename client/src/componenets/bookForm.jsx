@@ -30,7 +30,6 @@ class BookForm extends Component {
   };
 
   handleSubmit = (e, bookData) => {
-    console.log("submit function", bookData);
     e.preventDefault();
     console.log(bookData, "submit button");
     if (this.state.edited) {
@@ -68,12 +67,11 @@ class BookForm extends Component {
       mm = '0' + mm
     }
     today = yyyy + '-' + mm + '-' + dd;
-    console.log(today)
 
     const { bookEntry } = this.state;
     return (
       <React.Fragment>
-        <h1>Book Form</h1>
+        <h1 className="text-center">Book Form</h1>
         <form onSubmit={this.handleSubmit} className="m-2">
           <div className="form-group">
             <label htmlFor="bookName">Book Name</label>
@@ -114,18 +112,6 @@ class BookForm extends Component {
           </div>
           <div className="form-group">
             <label htmlFor="dateStarted">Date Started</label>
-            {/* <input
-              type="date"
-              className="form-control"
-              id="dateStarted"
-              name="dateStarted"
-              placeholder="Date Started"
-              min="01/01/1900"
-              maxLength={today}
-              value={bookEntry.dateStarted}
-              onChange={this.handleChange}
-              name="dateStarted"
-            /> */}
             <div>
               <DatePicker
                 className="form-control"

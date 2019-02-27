@@ -45,11 +45,14 @@ class BookList extends Component {
               <th scope="col">Start Date</th>
               <th scope="col">Progress</th>
               <th scope="col">Completed</th>
+
               <th />
               <th />
             </tr>
           </thead>
-          <tbody>
+
+
+          <tbody >
             {this.state.bookList.map((book, index) => (
               <tr key={book._id} >
                 <th scope="row">{index + 1}</th>
@@ -87,8 +90,10 @@ class BookList extends Component {
               </tr>
             ))}
           </tbody>
+
         </table>
-      </React.Fragment>
+
+      </React.Fragment >
     );
   }
 }
