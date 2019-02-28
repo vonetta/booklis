@@ -59,7 +59,7 @@ class BookList extends Component {
                 <td>{book.bookName}</td>
                 <td>{book.totalPages}</td>
                 <td>{book.currentPage}</td>
-                <td>{book.dateStarted}</td>
+                <td>{book.dateStarted.substring(0, 10)}</td>
                 <td>
                   <Line
                     percent={(book.currentPage / book.totalPages) * 100}

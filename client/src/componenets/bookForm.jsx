@@ -29,6 +29,27 @@ class BookForm extends Component {
     }));
   };
 
+
+  // onChange = date => {
+
+
+
+  //   var dateString = date;
+  //   dateString = new Date(dateString)
+  //   dateString = dateString.split('08').slice(0, 10).join(' ');
+  //   console.log(dateString);
+  // }
+
+  onChange = date => {
+
+    this.setState(prevState => ({
+      bookEntry: {
+        ...prevState.bookEntry,
+        dateStarted: date
+      }
+    }));
+  }
+
   handleSubmit = (e, bookData) => {
     e.preventDefault();
     console.log(bookData, "submit button");
@@ -56,17 +77,6 @@ class BookForm extends Component {
 
 
   render() {
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth() + 1; //January is 0!
-    var yyyy = today.getFullYear();
-    if (dd < 10) {
-      dd = '0' + dd
-    }
-    if (mm < 10) {
-      mm = '0' + mm
-    }
-    today = yyyy + '-' + mm + '-' + dd;
 
     const { bookEntry } = this.state;
     return (
@@ -114,11 +124,13 @@ class BookForm extends Component {
             <label htmlFor="dateStarted">Date Started</label>
             <div>
               <DatePicker
+                id="dateStarted"
+                name="dateStarted"
                 className="form-control"
                 onChange={this.onChange}
                 value={bookEntry.dateStarted}
                 maxDate={new Date()}
-                disableClock={false}
+
               />
             </div>
           </div>
