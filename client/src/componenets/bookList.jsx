@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ReduxThunk from 'redux-thunk'
 import { Link } from "react-router-dom";
 import { Line } from "rc-progress";
 import { getBooks, removeBook } from "../routes/books";
