@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { createNewBook, editBook } from "../routes/books";
+// import { createNewBook, editBook } from "../routes/books";
 import DatePicker from 'react-date-picker';
 import { connect } from 'react-redux';
-import * as actionCreator from '../store/actions/action'
+import rootSaga from '../sagas/saga'
+// import * as actionCreator from '../store/actions/action'
 class BookForm extends Component {
   // state = {
   //   bookEntry: {
@@ -69,7 +70,7 @@ class BookForm extends Component {
 
   render() {
 
-    const { bookEntry, handleChange, handleSubmit } = this.props;
+    const { bookEntry, handleChange, handleSubmit, onChange } = this.props;
     return (
       <React.Fragment>
         <h1 className="text-center">Book Form</h1>
@@ -118,10 +119,9 @@ class BookForm extends Component {
                 id="dateStarted"
                 name="dateStarted"
                 className="form-control"
-                onChange={this.props.onChange}
+                onChange={onChange}
                 value={bookEntry.dateStarted}
                 maxDate={new Date()}
-
               />
             </div>
           </div>
@@ -151,9 +151,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    handleSubmit: (bookData) => dispatch(actionCreator.submitForm(bookData)),
-    handleChange: (e) => dispatch(actionCreator.inputChange(e)),
-    onChange: (date) => dispatch(actionCreator.dateChange(date)),
+    handleSubmit: (bookData) => dispatch(rootSaga.submitForm(bookData)),
+    handleChange: (e) => dispatch(rootSaga.inputChange(e)),
+    onChange: (date) => dispatch(rootSaga.dateChange(date)),
   }
 }
 

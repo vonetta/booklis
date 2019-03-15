@@ -1,27 +1,22 @@
 import React, { Component } from "react";
-import ReduxThunk from 'redux-thunk'
+// import ReduxThunk from 'redux-thunk'
 import { Link } from "react-router-dom";
 import { Line } from "rc-progress";
-import { getBooks, removeBook } from "../routes/books";
+// import { getBooks, removeBook } from "../routes/books";
 import "react-circular-progressbar/dist/styles.css";
 import "../custom.css";
+import { connect } from 'react-redux';
+import rootSaga from '../sagas/saga'
 class BookList extends Component {
-  state = { bookList: [] };
 
-  componentDidMount() {
-    getBooks()
-      .then(results => results.data)
-      .then(data => this.setState({ bookList: data }));
-  }
-
-  handleDelete = book => {
-    removeBook(book)
-      // .then(book => console.log(book))
-      .then(getBooks)
-      .then(results => results.data)
-      .then(data => this.setState({ bookList: data }))
-      .catch(err => console.log(err));
-  };
+  // handleDelete = book => {
+  //   removeBook(book)
+  //      .then(book => console.log(book))
+  //     .then(getBooks)
+  //     .then(results => results.data)
+  //     .then(data => this.setState({ bookList: data }))
+  //     .catch(err => console.log(err));
+  // };
 
   handleEdit = book => {
     this.props.history.push({
@@ -30,6 +25,7 @@ class BookList extends Component {
     });
   };
   render() {
+    const { bookList } = this.props
     return (
       <React.Fragment>
         <h1>Book List</h1>
@@ -52,15 +48,14 @@ class BookList extends Component {
             </tr>
           </thead>
 
-
           <tbody >
-            {this.state.bookList.map((book, index) => (
+            {bookList.map((book, index) => (
               <tr key={book._id} >
                 <th scope="row">{index + 1}</th>
                 <td>{book.bookName}</td>
                 <td>{book.totalPages}</td>
                 <td>{book.currentPage}</td>
-                <td>{book.dateStarted.substring(0, 10)}</td>
+                <td>{book.dateStarted}</td>
                 <td>
                   <Line
                     percent={(book.currentPage / book.totalPages) * 100}
@@ -91,12 +86,23 @@ class BookList extends Component {
               </tr>
             ))}
           </tbody>
-
         </table>
-
       </React.Fragment >
     );
   }
 }
 
-export default BookList;
+const mapStateToProps = state => {
+  return {
+    bookList: state.bookList
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getBooks: () => dispatch(rootSaga())
+  }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(BookList);
