@@ -1,24 +1,19 @@
 import React, { Component } from "react";
-// import ReduxThunk from 'redux-thunk'
-import { Link } from "react-router-dom";
+import { connect } from 'react-redux';
+import { Link, withRouter } from "react-router-dom";
 import { Line } from "rc-progress";
-// import { getBooks, removeBook } from "../routes/books";
+import { deleteBookRequest } from '../actions/books'
 import "react-circular-progressbar/dist/styles.css";
 import "../custom.css";
-import { connect } from 'react-redux';
-import rootSaga from '../sagas/saga'
-class BookList extends Component {
 
-  // handleDelete = book => {
-  //   removeBook(book)
-  //      .then(book => console.log(book))
-  //     .then(getBooks)
-  //     .then(results => results.data)
-  //     .then(data => this.setState({ bookList: data }))
-  //     .catch(err => console.log(err));
-  // };
+
+class BookList extends Component {
+  handleDelete = book => {
+    this.props.deleteBookRequest(book)
+  };
 
   handleEdit = book => {
+    console.log(book)
     this.props.history.push({
       pathname: "/new-book",
       state: { book }
@@ -29,9 +24,12 @@ class BookList extends Component {
     return (
       <React.Fragment>
         <h1>Book List</h1>
-        <Link to="/new-book" className="btn btn-primary float-right">
+
+        <Link to="/new-book" className="btn btn-primary float-right" >
           Add Book
         </Link>
+
+
         <table className="table">
           <thead>
             <tr>
@@ -55,7 +53,7 @@ class BookList extends Component {
                 <td>{book.bookName}</td>
                 <td>{book.totalPages}</td>
                 <td>{book.currentPage}</td>
-                <td>{book.dateStarted}</td>
+                <td>{book.dateStarted.substr(0, 10)}</td>
                 <td>
                   <Line
                     percent={(book.currentPage / book.totalPages) * 100}
@@ -66,14 +64,14 @@ class BookList extends Component {
                 </td>
                 <td className="text-center">
                   {(book.currentPage / book.totalPages).toFixed(2) * 100} %
-                </td>
+            </td>
                 <td>
                   <button
                     className="btn btn-warning"
                     onClick={() => this.handleEdit(book)}
                   >
                     Edit
-                  </button>
+            </button>
                 </td>
                 <td>
                   <button
@@ -81,7 +79,7 @@ class BookList extends Component {
                     onClick={() => this.handleDelete(book)}
                   >
                     Delete
-                  </button>
+            </button>
                 </td>
               </tr>
             ))}
@@ -92,17 +90,6 @@ class BookList extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    bookList: state.bookList
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    getBooks: () => dispatch(rootSaga())
-  }
-}
+export default withRouter(connect(({ books }) => ({ books }), { deleteBookRequest })(BookList))
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(BookList);
