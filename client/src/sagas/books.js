@@ -2,7 +2,6 @@ import { takeEvery, takeLatest, put, call, fork, take } from 'redux-saga/effects
 import * as actions from '../actions/books'
 import * as api from '../api/books'
 
-
 function* getBooks() {
     try {
         const result = yield call(api.getBooks)
@@ -17,13 +16,9 @@ function* watchGetBooksRequest() {
     yield takeEvery(actions.Types.GET_BOOKS_REQUEST, getBooks)
 }
 
-
 function* createBook(action) {
     try {
-        console.log('createBook', action.payload)
         yield call(api.createBook, { bookName: action.payload.bookName, totalPages: action.payload.totalPages, currentPage: action.payload.currentPage, dateStarted: action.payload.dateStarted })
-        // yield (getBooks)
-
     }
     catch (e) {
         console.log(e)
@@ -51,10 +46,22 @@ function* watchDeleteBookRequest() {
     }
 }
 
+function* updateBook(action) {
+    try {
+        yield call(api.updateBook, { _id: action.payload._id, bookName: action.payload.bookName, totalPages: action.payload.totalPages, currentPage: action.payload.currentPage, dateStarted: action.payload.dateStarted })
+    }
+    catch (e) { console.log(e) }
+}
+
+function* watchUpdateBookRequest() {
+    yield takeLatest(actions.Types.UPDATE_BOOK_REQUEST, updateBook)
+}
+
 const booksSagas = [
     fork(watchGetBooksRequest),
     fork(watchCreateBookRequest),
-    fork(watchDeleteBookRequest)
+    fork(watchDeleteBookRequest),
+    fork(watchUpdateBookRequest)
 ]
 
 export default booksSagas

@@ -6,14 +6,12 @@ import { deleteBookRequest } from '../actions/books'
 import "react-circular-progressbar/dist/styles.css";
 import "../custom.css";
 
-
 class BookList extends Component {
   handleDelete = book => {
     this.props.deleteBookRequest(book)
   };
 
   handleEdit = book => {
-    console.log(book)
     this.props.history.push({
       pathname: "/new-book",
       state: { book }
@@ -24,12 +22,9 @@ class BookList extends Component {
     return (
       <React.Fragment>
         <h1>Book List</h1>
-
         <Link to="/new-book" className="btn btn-primary float-right" >
           Add Book
         </Link>
-
-
         <table className="table">
           <thead>
             <tr>
@@ -40,7 +35,6 @@ class BookList extends Component {
               <th scope="col">Start Date</th>
               <th scope="col">Progress</th>
               <th scope="col">Completed</th>
-
               <th />
               <th />
             </tr>

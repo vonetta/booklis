@@ -4,7 +4,6 @@ const INITIAL_STATE = {
   bookList: []
 }
 
-
 export default function books(state = INITIAL_STATE, action) {
   switch (action.type) {
     case Types.GET_BOOKS_SUCCESS: {
@@ -13,7 +12,6 @@ export default function books(state = INITIAL_STATE, action) {
         bookList: action.payload.bookList
       }
     }
-
     default: {
       return state
     }

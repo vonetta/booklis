@@ -1,9 +1,9 @@
 export const Types = {
-
     GET_BOOKS_REQUEST: 'books/get_books_request',
     GET_BOOKS_SUCCESS: 'books/get_books_success',
     CREATE_BOOK_REQUEST: 'books/create_book_request',
-    DELETE_BOOK_REQUEST: 'books/delete_book_request'
+    DELETE_BOOK_REQUEST: 'books/delete_book_request',
+    UPDATE_BOOK_REQUEST: 'books/update_book_request',
 }
 
 export const getBooksRequest = () => ({
@@ -25,4 +25,9 @@ export const createBookRequest = ({ bookName, totalPages, currentPage, dateStart
 export const deleteBookRequest = (book) => ({
     type: Types.DELETE_BOOK_REQUEST,
     payload: { book }
+})
+
+export const updateBookRequest = ({ _id, bookName, totalPages, currentPage, dateStarted }) => ({
+    type: Types.UPDATE_BOOK_REQUEST,
+    payload: { _id, bookName, totalPages, currentPage, dateStarted }
 })
