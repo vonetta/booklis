@@ -4,6 +4,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const mongo = require("./mongodb");
+require('dotenv').config()
 // const conn = mongo.connection;
 // const ObjectId = mongo.ObjectId;
 const cors = require("cors");

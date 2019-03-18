@@ -15,8 +15,8 @@ let transporter = nodemailer.createTransport({
     auth: {
         type: 'OAuth2',
         user: 'vonettastevenson@gmail.com',
-        clientId: '107868534070-rieivaahceq63phrk7895g42e8hbhfd5.apps.googleusercontent.com',
-        clientSecret: 'z3CeTunPured-2Zt41WdgczC',
+        clientId: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
         refreshToken: ''
 
 
@@ -31,6 +31,7 @@ module.exports = apiPrefix => {
 }
 
 function create(req, res) {
+    console.log(process.env.CLIENT_ID)
     // const mailOptions = {
     //     from: 'vonettastevenson@gmail.com',
     //     to: req.body.email,
