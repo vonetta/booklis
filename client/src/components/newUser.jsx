@@ -1,111 +1,106 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { createUserRequest } from '../actions/users'
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup'
+
 class NewUserForm extends Component {
-    state = {
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-        verified: false
-    }
 
-    handleChange = ({ target }) => {
-        const value = target.value;
-        const name = target.name;
-        this.setState(prevState => ({
-            ...prevState.state,
-            [name]: value
-        }));
-    };
-
-    handleSubmit = (e) => {
-        console.log('submit')
+    formSubmission = (values) => {
         this.props.createUserRequest({
-            firstName: this.state.firstName,
-            lastName: this.state.lastName,
-            email: this.state.email,
-            password: this.state.password,
-            verified: this.state.verified,
+            firstName: values.firstName,
+            lastName: values.lastName,
+            email: values.email,
+            password: values.password,
+            verified: false,
+            dateRegistered: new Date()
         })
     }
-
     render() {
-        const { firstName, lastName, email, password, confirmPassword } = this.state
+        const validationSchema = Yup.object().shape({
+            firstName: Yup.string()
+                .min(2, "Your name is longer than that")
+                .required('First Name is required'),
+            lastName: Yup.string()
+                .min(2, "Your name is longer than that")
+                .required("Last Name is Required"),
+            email: Yup.string()
+                .email('Email is not valid')
+                .required('Email is Required'),
+            password: Yup.string()
+                .required("Password is required"),
+
+        })
         return (
             <React.Fragment>
                 <div className="container">
                     <h1 className="text-center">Sign Up</h1>
-                    <form onSubmit={this.handleSubmit}>
-                        <div className="form-group">
-                            <label htmlFor="firstName">First Name:</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="firstName"
-                                name="firstName"
-                                aria-describedby="firstName"
-                                placeholder="Enter First Name"
-                                value={firstName}
-                                onChange={this.handleChange}
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="lastName">Last Name:</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="lastName"
-                                name="lastName"
-                                placeholder="Enter Last Name"
-                                value={lastName}
-                                onChange={this.handleChange}
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="email">Email Address:</label>
-                            <input
-                                type="email"
-                                className="form-control"
-                                id="email"
-                                name="email"
-                                placeholder="Enter Email Address"
-                                value={email}
-                                onChange={this.handleChange}
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="password">Password:</label>
-                            <input
-                                type="password"
-                                className="form-control"
-                                id="password"
-                                name="password"
-                                placeholder="Enter Password"
-                                value={password}
-                                onChange={this.handleChange}
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="confirmPassword">Confirm Password:</label>
-                            <input
-                                type="confirmPassword"
-                                className="form-control"
-                                id="confirmPassword"
-                                name="confirmPassword"
-                                placeholder="Confirm Password"
-                                value={confirmPassword}
-                                onChange={this.handleChange}
-                            />
-                        </div>
-                        <button type="button"
-                            className="btn btn-primary" onClick={this.handleSubmit}>
-                            Submit
-          </button>
-                    </form>
+                    <Formik initialValues={{ firstName: '', lastName: '', email: '', password: '', comfirmPassword: '' }} validationSchema={validationSchema} onSubmit={this.formSubmission}>
+                        {({
+                            errors, touched, handleBlur
+                        }) => (
+                                <Form>
+                                    <div className="form-group">
+                                        <label htmlFor="firstName">First Name:</label>
+                                        <Field
+                                            className="form-control"
+                                            name="firstName"
+                                            aria-describedby="firstName"
+                                            placeholder="Enter First Name"
+                                            onBlur={handleBlur}
+                                        />
+                                        {errors.firstName && touched.firstName && (<div className="alert alert-danger">{errors.firstName}</div>)}
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="lastName">Last Name:</label>
+                                        <Field
+                                            className="form-control"
+                                            name="lastName"
+                                            placeholder="Enter Last Name"
+                                            onBlur={handleBlur}
+                                        />
+                                        {errors.lastName && touched.lastName && (<div className="alert alert-danger">{errors.lastName}</div>)}
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="email">Email Address:</label>
+                                        <Field
+                                            type="email"
+                                            className="form-control"
+                                            name="email"
+                                            placeholder="Enter Email Address"
+                                        />
+                                        {errors.email && touched.email && (<div className="alert alert-danger">{errors.email}</div>)}
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="password">Password:</label>
+                                        <Field
+                                            type="password"
+                                            className="form-control"
+                                            name="password"
+                                            placeholder="Enter Password"
+                                        />
+                                        {errors.password && touched.password && (<div className="alert alert-danger">{errors.password}</div>)}
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="confirmPassword">Confirm Password:</label>
+                                        <input
+                                            type="password"
+                                            className="form-control"
+                                            id="confirmPassword"
+                                            name="confirmPassword"
+                                            placeholder="Confirm Password"
+                                        />
+                                        {errors.confirmPassword && touched.confirmPassword && (<div className="alert alert-danger">{errors.confirmPassword}</div>)}
+                                    </div>
+                                    <button type="submit"
+                                        className="btn btn-primary">
+                                        Submit
+                             </button>
+                                </Form>
+                            )}
+                    </ Formik>
                 </div>
-            </React.Fragment>
+            </React.Fragment >
         );
     }
 }

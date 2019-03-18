@@ -2,16 +2,11 @@ import React, { Component } from "react";
 import DatePicker from 'react-date-picker';
 import { connect } from 'react-redux';
 import { createBookRequest, updateBookRequest } from '../actions/books'
-
+import { Formik, Form, Field } from 'formik'
+import * as Yup from 'yup';
 class BookForm extends Component {
   state = {
-    bookEntry: {
-      bookName: "",
-      totalPages: "",
-      currentPage: "",
-      dateStarted: ""
-    },
-    errors: {},
+    dateStarted: "",
     edited: false
   };
 
@@ -20,132 +15,128 @@ class BookForm extends Component {
       return this.handleEdit(this.props.location.state.book);
     }
   }
-  handleChange = ({ target }) => {
-    const value = target.value;
-    const name = target.name;
-    this.setState(prevState => ({
-      bookEntry: {
-        ...prevState.bookEntry,
-        [name]: value
-      }
-    }));
-  };
 
   onChange = date => {
     this.setState(prevState => ({
-      bookEntry: {
-        ...prevState.bookEntry,
-        dateStarted: date
-      }
+      ...prevState,
+      dateStarted: date
     }));
   }
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-
+  formSubmission = (values) => {
     if (this.state.edited) {
       console.log(this.state)
+      console.log(values)
       this.props.updateBookRequest({
-        _id: this.state.bookEntry._id,
-        bookName: this.state.bookEntry.bookName,
-        totalPages: this.state.bookEntry.totalPages,
-        currentPage: this.state.bookEntry.currentPage,
-        dateStarted: this.state.bookEntry.dateStarted
-      });
-    } else {
-      console.log(this.state.bookEntry, "submit button");
+        _id: values._id,
+        bookName: values.bookName,
+        totalPages: values.totalPages,
+        currentPage: values.currentPage,
+        dateStarted: this.state.dateStarted,
+        edited: true
+      })
+    }
+    else {
       this.props.createBookRequest({
-        bookName: this.state.bookEntry.bookName,
-        totalPages: this.state.bookEntry.totalPages,
-        currentPage: this.state.bookEntry.currentPage,
-        dateStarted: this.state.bookEntry.dateStarted
+        bookName: values.bookName,
+        totalPages: values.totalPages,
+        currentPage: values.currentPage,
+        dateStarted: this.state.dateStarted
       })
     }
     window.location = "/";
-  };
+  }
 
   handleEdit = bookData => {
-    console.log(bookData, 'edited')
     this.setState(prevState => ({
-      bookEntry: {
-        ...prevState.bookEntry,
-        _id: bookData._id,
-        bookName: bookData.bookName,
-        totalPages: bookData.totalPages,
-        currentPage: bookData.currentPage,
-        dateStarted: bookData.dateStarted
-      },
+      ...prevState,
+      dateStarted: bookData.dateStarted,
       edited: true
     }));
   };
 
+  FormikDatePicker = ({
+    name,
+    value,
+  }) => {
+    return (
+      <DatePicker
+        id="dateStarted"
+        name="dateStarted"
+        className="form-control"
+        onChange={this.onChange}
+        value={this.state.dateStarted !== '' ? new Date(this.state.dateStarted) : null}
+        maxDate={new Date()}
+
+      />
+    )
+  }
   render() {
-    const { bookEntry } = this.state
+    const validationSchema = Yup.object().shape({
+      bookName: Yup.string()
+        .required("Please Enter a Book Name"),
+      currentPage: Yup.string()
+        .required("Please enter the page number you are on"),
+      totalPages: Yup.string()
+        .required("Please Enter total amount of pages the book has"),
+    })
     return (
       <React.Fragment>
         <div className="container">
-
-
           <h1 className="text-center">Book Form</h1>
-          <form onSubmit={this.handleSubmit} className="m-2">
-            <div className="form-group">
-              <label htmlFor="bookName">Book Name</label>
-              <input
-                type="text"
-                className="form-control"
-                id="bookName"
-                name="bookName"
-                aria-describedby="emailHelp"
-                placeholder="Book Name"
-                value={bookEntry.bookName}
-                onChange={this.handleChange}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="currentPage">Current Pages</label>
-              <input
-                type="number"
-                className="form-control"
-                id="currentPage"
-                name="currentPage"
-                placeholder="Current Page of Book"
-                value={bookEntry.currentPage}
-                onChange={this.handleChange}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="totalPages">Total Pages</label>
-              <input
-                type="number"
-                className="form-control"
-                id="totalPages"
-                name="totalPages"
-                placeholder="Total Pages of Book"
-                value={bookEntry.totalPages}
-                onChange={this.handleChange}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="dateStarted">Date Started</label>
-              <div>
-                <DatePicker
-                  id="dateStarted"
-                  name="dateStarted"
-                  className="form-control"
-                  onChange={this.onChange}
-                  value={bookEntry.dateStarted !== '' ? new Date(bookEntry.dateStarted) : null}
-                  maxDate={new Date()}
-                />
-              </div>
-            </div>
-
-            <button type="button"
-              className="btn btn-primary" onClick={this.handleSubmit}>
-              Submit
+          <Formik initialValues={{
+            _id: this.props.location.state !== undefined ? this.props.location.state.book._id : '',
+            bookName: this.props.location.state !== undefined ? this.props.location.state.book.bookName : '',
+            totalPages: this.props.location.state !== undefined ? this.props.location.state.book.totalPages : '',
+            currentPage: this.props.location.state !== undefined ? this.props.location.state.book.currentPage : ''
+          }} validationSchema={validationSchema} onSubmit={this.formSubmission}>
+            {({ values, errors, touched, handleBlur }) => (
+              <Form className="m-2">
+                <div className="form-group">
+                  <label htmlFor="bookName">Book Name</label>
+                  <Field
+                    type="text"
+                    className="form-control"
+                    name="bookName"
+                    aria-describedby="emailHelp"
+                    placeholder="Book Name"
+                    value={values.bookName}
+                  />
+                  {errors.bookName && touched.bookName && (<div className="alert alert-danger">{errors.bookName}</div>)}
+                </div>
+                <div className="form-group">
+                  <label htmlFor="currentPage">Current Pages</label>
+                  <Field
+                    type="number"
+                    className="form-control"
+                    name="currentPage"
+                    placeholder="Current Page of Book"
+                  />
+                  {errors.currentPage && touched.currentPage && (<div className="alert alert-danger">{errors.currentPage}</div>)}
+                </div>
+                <div className="form-group">
+                  <label htmlFor="totalPages">Total Pages</label>
+                  <Field
+                    type="number"
+                    className="form-control"
+                    name="totalPages"
+                    placeholder="Total Pages of Book"
+                  />
+                  {errors.totalPages && touched.totalPages && (<div className="alert alert-danger">{errors.totalPages}</div>)}
+                </div>
+                <div className="form-group">
+                  <label htmlFor="dateStarted">Date Started</label>
+                  <Field component={this.FormikDatePicker} />
+                </div>
+                <button type="submit"
+                  className="btn btn-primary">
+                  Submit
           </button>
-          </form>
+              </Form>
+            )}
+          </Formik>
         </div>
-      </React.Fragment>
+      </React.Fragment >
     );
   }
 }

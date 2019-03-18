@@ -32,11 +32,9 @@ function create(model) {
     .collection("books")
     .insertOne(doc)
     .then(result => {
-      console.log("backend success");
       result.insertedId.toString();
     })
     .catch(err => {
-      console.log("backend error");
       return Promise.reject(err);
     });
 }

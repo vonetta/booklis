@@ -12,7 +12,7 @@ import { getBooksRequest } from '../actions/books';
 
 class App extends Component {
   componentDidMount() {
-    // this.props.getBooksRequest()
+    this.props.getBooksRequest()
   }
   render() {
     const bookList = this.props.books.bookList

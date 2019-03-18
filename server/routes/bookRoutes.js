@@ -3,7 +3,6 @@ const router = require("express").Router();
 const booksControllerFactory = require("../controllers/books.controller");
 const booksApiPrefix = "/api/books";
 
-console.log("in routes");
 module.exports = apiPrefix => {
   const booksController = booksControllerFactory(apiPrefix);
 

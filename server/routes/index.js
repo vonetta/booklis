@@ -2,18 +2,20 @@
 const express = require("express");
 const router = express.Router();
 
-const bookApiPrefix = "/api/books";
-const bookRoutes = require("./bookRoutes")(bookApiPrefix);
-
 const path = require("path");
 const contentPath = path.join(__dirname, "../../content");
 module.exports = router;
 router.use(express.static(contentPath));
 
-//API Prefixes
-console.log("index");
-router.use(bookApiPrefix, bookRoutes);
 
+const bookApiPrefix = "/api/books";
+const userApiPrefix = "/api/users";
+const bookRoutes = require("./bookRoutes")(bookApiPrefix);
+const userRoutes = require("./userRoutes")(userApiPrefix)
+//API Prefixes
+
+router.use(bookApiPrefix, bookRoutes);
+router.use(userApiPrefix, userRoutes)
 useAPIErrorHandlers(router);
 
 function useAPIErrorHandlers(router) {
