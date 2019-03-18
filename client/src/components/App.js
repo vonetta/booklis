@@ -23,7 +23,7 @@ class App extends Component {
           <Route path="/new-book" component={BookForm} />
           <Route path="/login" component={Login} />
           <Route path="/sign-up" component={NewUserForm} />
-          <Route path="/" exact render={() => <BookList bookList={bookList} />} />
+          <Route path="/" render={() => <BookList bookList={bookList} />} />
         </Switch>
       </div>
     );
