@@ -28,14 +28,18 @@ class NewUserForm extends Component {
                 .email('Email is not valid')
                 .required('Email is Required'),
             password: Yup.string()
+                .min(5, "Password has to be more than 5 characters")
                 .required("Password is required"),
-
+            confirmPassword: Yup.string()
+                .test('passwords-match', 'Passwords must match', function (value) {
+                    return this.parent.password === value
+                })
         })
         return (
             <React.Fragment>
                 <div className="container">
                     <h1 className="text-center">Sign Up</h1>
-                    <Formik initialValues={{ firstName: '', lastName: '', email: '', password: '', comfirmPassword: '' }} validationSchema={validationSchema} onSubmit={this.formSubmission}>
+                    <Formik initialValues={{ firstName: '', lastName: '', email: '', password: '', confirmPassword: '' }} validationSchema={validationSchema} onSubmit={this.formSubmission}>
                         {({
                             errors, touched, handleBlur
                         }) => (

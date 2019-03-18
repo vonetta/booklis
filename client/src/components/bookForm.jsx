@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { createBookRequest, updateBookRequest } from '../actions/books'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup';
+import { toast } from 'react-toastify';
 class BookForm extends Component {
   state = {
     dateStarted: "",
@@ -35,6 +36,7 @@ class BookForm extends Component {
         dateStarted: this.state.dateStarted,
         edited: true
       })
+      toast.success("Current Book has been updated")
     }
     else {
       this.props.createBookRequest({
@@ -43,6 +45,7 @@ class BookForm extends Component {
         currentPage: values.currentPage,
         dateStarted: this.state.dateStarted
       })
+      toast.success("New Book has been created")
     }
     window.location = "/";
   }

@@ -5,10 +5,12 @@ import { Line } from "rc-progress";
 import { deleteBookRequest } from '../actions/books'
 import "react-circular-progressbar/dist/styles.css";
 import "../custom.css";
+import { toast } from 'react-toastify';
 
 class BookList extends Component {
   handleDelete = book => {
     this.props.deleteBookRequest(book)
+    toast.success('Book has been deleted')
   };
 
   handleEdit = book => {
