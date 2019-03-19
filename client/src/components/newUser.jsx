@@ -37,13 +37,12 @@ class NewUserForm extends Component {
         })
         return (
             <React.Fragment>
-                <div className="container">
+                <div className="container card col-6 shadow-sm p-3 mb-5 bg-white rounded mt-5">
                     <h1 className="text-center">Sign Up</h1>
                     <Formik initialValues={{ firstName: '', lastName: '', email: '', password: '', confirmPassword: '' }} validationSchema={validationSchema} onSubmit={this.formSubmission}>
-                        {({
-                            errors, touched, handleBlur
+                        {({ errors, touched, handleBlur
                         }) => (
-                                <Form>
+                                <Form className="card-body">
                                     <div className="form-group">
                                         <label htmlFor="firstName">First Name:</label>
                                         <Field
@@ -72,6 +71,7 @@ class NewUserForm extends Component {
                                             className="form-control"
                                             name="email"
                                             placeholder="Enter Email Address"
+                                            onBlur={handleBlur}
                                         />
                                         {errors.email && touched.email && (<div className="alert alert-danger">{errors.email}</div>)}
                                     </div>
@@ -82,17 +82,18 @@ class NewUserForm extends Component {
                                             className="form-control"
                                             name="password"
                                             placeholder="Enter Password"
+                                            onBlur={handleBlur}
                                         />
                                         {errors.password && touched.password && (<div className="alert alert-danger">{errors.password}</div>)}
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="confirmPassword">Confirm Password:</label>
-                                        <input
+                                        <Field
                                             type="password"
                                             className="form-control"
-                                            id="confirmPassword"
                                             name="confirmPassword"
                                             placeholder="Confirm Password"
+                                            onBlur={handleBlur}
                                         />
                                         {errors.confirmPassword && touched.confirmPassword && (<div className="alert alert-danger">{errors.confirmPassword}</div>)}
                                     </div>

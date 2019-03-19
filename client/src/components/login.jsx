@@ -1,61 +1,78 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
+import { toast } from 'react-toastify';
+import { createLoginRequest } from '../actions/users'
+import { Formik, Form, Field } from 'formik'
+import * as Yup from 'yup';
+
+
 class Login extends Component {
-    state = {
-        userName: '',
-        password: ''
+
+    formSubmission = (values) => {
+        try {
+            this.props.createLoginRequest({
+                email: values.email,
+                password: values.password
+            })
+            toast.success('User is logged in')
+        }
+        catch (err) {
+            toast.warn("User is not regiesters, Please try another email or Sign up")
+        }
     }
-
-    handleChange = ({ target }) => {
-        const value = target.value;
-        const name = target.name;
-        this.setState(prevState => ({
-            ...prevState.state,
-            [name]: value
-        }));
-    };
-
-    handleSubmit = (e) => {
-        e.preventDefault();
-    }
-
     render() {
-        const { userName, password } = this.state
+        const validationSchema = Yup.object().shape({
+            email: Yup.string()
+                .email("Please enter a valid Email")
+                .required("Email is required"),
+            password: Yup.string()
+                .min(5, "Password is more than 5 characters")
+                .required('Password is required')
+        })
+
         return (
             <React.Fragment>
-                <div className="container">
-
-
-                    <form onSubmit={this.handleSubmit} className="m-2">
-                        <div className="form-group">
-                            <label htmlFor="bookName">UserName/Email:</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="username"
-                                name="username"
-                                aria-describedby="username"
-                                placeholder="Username / Email"
-                                value={userName}
-                                onChange={this.handleChange}
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="currentPage">Password</label>
-                            <input
-                                type="password"
-                                className="form-control"
-                                id="password"
-                                name="password"
-                                placeholder="Password"
-                                value={password}
-                                onChange={this.handleChange}
-                            />
-                        </div>
-                    </form>
+                <div className="container card col-6 shadow-sm p-3 mb-5 bg-white rounded mt-5">
+                    <h1 className="text-center">Login</h1>
+                    <Formik initialValues={{ email: '', password: '' }} validationSchema={validationSchema} onSubmit={this.formSubmission}>
+                        {({ errors, touched, handleBlur }) => (
+                            <Form className="m-2">
+                                <div className="form-group">
+                                    <label htmlFor="email">Email:</label>
+                                    <Field
+                                        type="email"
+                                        className="form-control"
+                                        name="email"
+                                        aria-describedby="email"
+                                        placeholder="Email"
+                                        onBlur={handleBlur}
+                                    />
+                                    {errors.email && touched.email && (<div className="alert alert-danger">{errors.email}</div>)}
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="password">Password</label>
+                                    <Field
+                                        type="password"
+                                        className="form-control"
+                                        name="password"
+                                        placeholder="Password"
+                                        onBlur={handleBlur}
+                                    />
+                                    {errors.password && touched.password && (<div className="alert alert-danger">{errors.password}</div>)}
+                                </div>
+                                <button type="submit" className="btn btn-primary">
+                                    Submit
+                                </button>
+                            </Form>
+                        )}
+                    </Formik>
                 </div>
-            </React.Fragment>
+            </React.Fragment >
         );
     }
 }
 
-export default Login;
+export default connect(({ users }) => ({ users }),
+    {
+        createLoginRequest
+    })(Login);

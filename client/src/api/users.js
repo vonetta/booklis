@@ -1,10 +1,10 @@
 import axios from 'axios'
 
-export const createUser = async ({ firstName, lastName, email, password, verified }) => {
+export const createUser = async ({ firstName, lastName, email, password, verified, dateRegistered }) => {
+    console.log(dateRegistered)
     try {
-        console.log(firstName)
-        const response = await axios.post("http://localhost:3001/api/users", {
-            firstName, lastName, email, password, verified
+        const response = await axios.post("http://localhost:3001/api/users/", {
+            firstName, lastName, email, password, verified, dateRegistered
         })
         return onSuccess(response)
     }
@@ -13,6 +13,17 @@ export const createUser = async ({ firstName, lastName, email, password, verifie
     }
 }
 
+export const loginUser = async ({ email, password }) => {
+    try {
+        const response = await axios.post("http://localhost:3001/api/users/login", {
+            email, password
+        })
+        return onSuccess(response)
+    }
+    catch (err) {
+        return onError(err)
+    }
+}
 function onSuccess(response) {
     return response
 }

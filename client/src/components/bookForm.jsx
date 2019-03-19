@@ -85,8 +85,8 @@ class BookForm extends Component {
     })
     return (
       <React.Fragment>
-        <div className="container">
-          <h1 className="text-center">Book Form</h1>
+        <div className="container card mt-5 shadow-sm p-3 mb-5 bg-white rounded">
+          <h1 className="text-center mt-3">New Book Entry</h1>
           <Formik initialValues={{
             _id: this.props.location.state !== undefined ? this.props.location.state.book._id : '',
             bookName: this.props.location.state !== undefined ? this.props.location.state.book.bookName : '',
@@ -94,7 +94,7 @@ class BookForm extends Component {
             currentPage: this.props.location.state !== undefined ? this.props.location.state.book.currentPage : ''
           }} validationSchema={validationSchema} onSubmit={this.formSubmission}>
             {({ values, errors, touched, handleBlur }) => (
-              <Form className="m-2">
+              <Form className="m-2 card-body">
                 <div className="form-group">
                   <label htmlFor="bookName">Book Name</label>
                   <Field
