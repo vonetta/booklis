@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Switch, withRouter, Route } from "react-router-dom";
 import { connect } from 'react-redux';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import { getBooksRequest } from '../actions/books';
 import BookForm from "./bookForm";
 import BookList from "./bookList";
@@ -19,35 +19,44 @@ class App extends Component {
     navColor: ''
   }
 
-  generateRandomColor() {
-    let r = Math.round((Math.random() * 255)); //red 0 to 255
-    let g = Math.round((Math.random() * 255)); //green 0 to 255
-    let b = Math.round((Math.random() * 255)); //blue 0 to 255
-    return 'rgb(' + r + ', ' + g + ', ' + b + ')';
-  };
+  // generateRandomColor() {
+  //   let r = Math.round((Math.random() * 255)); //red 0 to 255
+  //   let g = Math.round((Math.random() * 255)); //green 0 to 255
+  //   let b = Math.round((Math.random() * 255)); //blue 0 to 255
+  //   return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+  // };
 
 
   componentDidMount() {
-    this.props.getBooksRequest()
+    try {
+      this.props.getBooksRequest()
+      toast.success("Your book list has been loaded")
+    }
+
+    catch (err) {
+      toast.danger("Error has occured")
+    }
     // let color = this.generateRandomColor()
     // let navColor = this.generateRandomColor()
-    setInterval(() => {
-      let color = this.generateRandomColor()
-      let navColor = this.generateRandomColor()
-      // let color = this.generateRandomColor()
-      // let navColor = this.generateRandomColor()
+    // setInterval(() => {
+    // let color = this.generateRandomColor()
+    // let navColor = this.generateRandomColor()
+    // let color = this.generateRandomColor()
+    // let navColor = this.generateRandomColor()
 
-      this.setState({
-        color: color,
-        navColor: navColor
-      })
-    }, 5000)
+    //   this.setState({
+    //     color: color,
+    //     navColor: navColor
+    //   })
+    // }, 5000)
     // toast.success("Your Book List are loaded")
   }
   render() {
     const bookList = this.props.books.bookList
     return (
-      <div className="container-fluid" style={{ backgroundColor: this.state.color }}>
+      <div className="container-fluid" style={{
+        backgroundColor: this.state.color
+      }}>
         <Nav color={this.state.navColor} />
         <ToastContainer position="top-right"
           autoClose={3000}
@@ -62,7 +71,7 @@ class App extends Component {
           <Route path="/sign-up" component={NewUserForm} />
           <Route path="/" render={() => <BookList bookList={bookList} />} />
         </Switch>
-      </div>
+      </div >
     );
   }
 }

@@ -10,12 +10,8 @@ function getAllBooks() {
     .collection("books")
     .find({ dateDeactivated: null })
     .toArray()
-    .then(result => {
-      return result;
-    })
-    .catch(err => {
-      return Promise.reject(err);
-    });
+    .then(result => result)
+    .catch(err => Promise.reject(err));
 }
 
 function create(model) {
