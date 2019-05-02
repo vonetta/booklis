@@ -8,16 +8,17 @@ import * as Yup from 'yup';
 
 class Login extends Component {
 
-    formSubmission = (values) => {
+    formSubmission = async (values) => {
         try {
             this.props.createLoginRequest({
                 email: values.email,
                 password: values.password
             })
-            toast.success('User is logged in')
+
         }
         catch (err) {
-            toast.warn("User is not regiesters, Please try another email or Sign up")
+            console.log(err)
+            toast.warn("User is not registered, Please try another email or Sign up")
         }
     }
     render() {

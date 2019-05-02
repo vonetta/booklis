@@ -1,17 +1,38 @@
-body{
+body {
   margin: 0;
   padding: 0;
   height: 100%;
+  overflow: visible !important;
+}
+nav {
+  /* border-bottom: 0.25px solid black; */
+  box-shadow: 1px 1px 1px whitesmoke;
+}
+.container-fluid {
+  height: 100vh;
+  /* background-color: #72ecfa;*/
+  overflow: visible !important;
+  background: -webkit-linear-gradient(45deg, #085078 10%, #85d8ce 90%);
+  background: -moz-linear-gradient(45deg, #085078 10%, #85d8ce 90%);
+  background: -ms-linear-gradient(45deg, #085078 10%, #85d8ce 90%);
+  background: -o-linear-gradient(45deg, #085078 10%, #85d8ce 90%);
+  background: linear-gradient(10deg, #085078 10%, #85d8ce 90%);
+  /* padding: 0 !important; */
+  padding-top: 10%;
 }
 
-.cnontainer-fluid{
-  padding: 0 !important;
+.bookList {
+  width: 75% !important;
+  margin: auto;
+  box-shadow: 2px 2px 5px slategray;
+  padding: 2.5%;
+  background-color: whitesmoke;
 }
 
 .CircularProgressbar {
   width: 5%;
 }
 
-.react-date-picker__wrapper{
+.react-date-picker__wrapper {
   border: none !important;
 }
