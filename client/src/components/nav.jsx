@@ -23,7 +23,7 @@ const Nav = props => {
           <span className="navbar-toggler-icon" />
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <div className="navbar-nav mr-auto">
+          <div className="navbar-nav ">
             <NavLink to="/book-list" className="nav-link">
               Book List
             </NavLink>

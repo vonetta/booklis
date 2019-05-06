@@ -48,8 +48,8 @@ class BookList extends Component {
                 <tr key={book._id}>
                   <th scope="row">{index + 1}</th>
                   <td>{book.bookName}</td>
-                  <td>{book.totalPages}</td>
-                  <td>{book.currentPage}</td>
+                  <td className="text-center">{book.totalPages}</td>
+                  <td className="text-center">{book.currentPage}</td>
                   <td>{book.dateStarted.substr(0, 10)}</td>
                   <td>
                     <Line
