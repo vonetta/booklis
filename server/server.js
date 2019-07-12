@@ -6,7 +6,7 @@ const mongo = require("./mongodb");
 const app = express();
 require("dotenv").config();
 // const auth = require('./routes/auth')
-const originUrl = "http://localhost:3000";
+// const originUrl = "http://localhost:3000";
 const cors = require("cors");
 const mainRouter = require("./routes");
 const configMongoDB = require("./config/mongodb.config");
