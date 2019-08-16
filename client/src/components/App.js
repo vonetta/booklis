@@ -1,65 +1,45 @@
-import React, { Component } from "react";
-import { Switch, withRouter, Route } from "react-router-dom";
-import { connect } from "react-redux";
-import { ToastContainer, toast } from "react-toastify";
-import { getBooksRequest } from "../actions/books";
+import React, { useState, useEffect } from "react";
+import { Switch, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import BookForm from "./bookForm";
 import BookList from "./bookList";
-import Login from "./login";
-import NewUserForm from "./newUser";
+// import Login from "./login";
+// import NewUserForm from "./newUser";
 import Nav from "./nav";
-import "../../node_modules/bootstrap/dist/css/bootstrap.css";
 import "../custom.css";
-import "react-toastify/dist/ReactToastify.min.css";
-// import { toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+import { getBooks } from "../api/books";
 
-class App extends Component {
-  state = {
-    color: "",
-    navColor: ""
-  };
-
-  componentDidMount() {
-    try {
-      this.props.getBooksRequest();
-      toast.success("Your book list has been loaded");
-    } catch (err) {
-      toast.danger("Error has occured");
+const App = () => {
+  let [bookCollection, setBookCollection] = useState();
+  useEffect(() => {
+    async function retrieveBookList() {
+      let bookList = await getBooks();
+      setBookCollection(bookList.data);
     }
-  }
-  render() {
-    const bookList = this.props.books.bookList;
+    retrieveBookList();
+  }, [bookCollection]);
 
-    return (
-      <>
-        <Nav color={this.state.navColor} />
-        <div className="container-fluid">
-          <ToastContainer
-            position="top-right"
-            autoClose={3000}
-            hideProgressBar={true}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnVisibilityChange
-          />
-          <Switch>
-            <Route path="/new-book" component={BookForm} />
-            {/* <Route path="/login" component={Login} /> */}
-            {/* <Route path="/sign-up" component={NewUserForm} /> */}
-            <Route path="/" render={() => <BookList bookList={bookList} />} />
-          </Switch>
-        </div>
-      </>
-    );
-  }
-}
+  return (
+    <div className="app">
+      <Nav />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnVisibilityChange
+      />
+      <Switch>
+        <Route path="/new-book" component={BookForm} />
+        {/* <Route path="/login" component={Login} /> */}
+        {/* <Route path="/sign-up" component={NewUserForm} /> */}
+        <Route path="/" render={() => <BookList bookList={bookCollection} />} />
+      </Switch>
+    </div>
+  );
+};
 
-export default withRouter(
-  connect(
-    ({ books }) => ({ books }),
-    {
-      getBooksRequest
-    }
-  )(App)
-);
+export default App;

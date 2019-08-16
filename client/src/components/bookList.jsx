@@ -1,96 +1,80 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { useState } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { Line } from "rc-progress";
-import { deleteBookRequest } from "../actions/books";
 import "react-circular-progressbar/dist/styles.css";
-import "../custom.css";
 import { toast } from "react-toastify";
+import { deleteBook } from "../api/books";
 
-class BookList extends Component {
-  handleDelete = book => {
-    this.props.deleteBookRequest(book);
+const BookList = ({ bookList, history }) => {
+  const handleDelete = book => {
+    deleteBook(book);
     toast.success("Book has been deleted");
   };
 
-  handleEdit = book => {
-    this.props.history.push({
+  const handleEdit = book => {
+    history.push({
       pathname: "/new-book",
       state: { book }
     });
   };
-  render() {
-    const { bookList } = this.props;
-    return (
-      <React.Fragment>
-        <div className="mr-6 table-responsive bookList">
-          <h1>Book List</h1>
-          <Link to="/new-book" className="btn btn-primary float-right">
-            Add Book
-          </Link>
-          <table className="table">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Book Name</th>
-                <th scope="col">Total Pages</th>
-                <th scope="col">Current Page</th>
-                <th scope="col">Start Date</th>
-                <th scope="col">Progress</th>
-                <th scope="col">Completed</th>
-                <th />
-                <th />
-              </tr>
-            </thead>
 
-            <tbody>
-              {bookList.map((book, index) => (
-                <tr key={book._id}>
-                  <th scope="row">{index + 1}</th>
-                  <td>{book.bookName}</td>
-                  <td className="text-center">{book.totalPages}</td>
-                  <td className="text-center">{book.currentPage}</td>
-                  <td>{book.dateStarted.substr(0, 10)}</td>
-                  <td>
+  return (
+    <React.Fragment>
+      <div className="mr-6 bookList">
+        <h1>Book List</h1>
+        <Link to="/new-book" className="btn btn-primary float-right">
+          Add Book
+        </Link>
+
+        {bookList && (
+          <div className="bookItems">
+            {bookList.reverse().map((book, index) => (
+              <div className="card" key={index}>
+                <div className="card-body">
+                  <h4 className="card-title">
+                    {index + 1}) {book.bookName}
+                  </h4>
+                  <p className="card-text">
+                    Date Started: {book.dateStarted.substr(0, 10)}
+                  </p>
+                  <h6 className="card-subtitle mb-2 text-muted">
+                    Total Pages: {book.totalPages}
+                  </h6>
+                  <h6 className="card-subtitle mb-2 text-muted">
+                    Current Page: {book.currentPage}
+                  </h6>
+                  <hr />
+                  <p className="card-text">
                     <Line
                       percent={(book.currentPage / book.totalPages) * 100}
-                      strokeWidth="6"
+                      strokeWidth="2"
                       strokeColor="#ff0000"
                       trailColor="#000000"
                     />
-                  </td>
-                  <td className="text-center">
-                    {(book.currentPage / book.totalPages).toFixed(2) * 100} %
-                  </td>
-                  <td>
-                    <button
-                      className="btn btn-warning"
-                      onClick={() => this.handleEdit(book)}
-                    >
-                      Edit
-                    </button>
-                  </td>
-                  <td>
-                    <button
-                      className="btn btn-danger"
-                      onClick={() => this.handleDelete(book)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </React.Fragment>
-    );
-  }
-}
+                    {(book.currentPage / book.totalPages).toFixed(2) * 100}%
+                    Completed
+                  </p>
 
-export default withRouter(
-  connect(
-    ({ books }) => ({ books }),
-    { deleteBookRequest }
-  )(BookList)
-);
+                  <button
+                    href="#"
+                    className="card-link btn btn-warning"
+                    onClick={() => handleEdit(book)}>
+                    Edit
+                  </button>
+                  <button
+                    href="#"
+                    className="card-link btn btn-danger"
+                    onClick={() => handleDelete(book)}>
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </React.Fragment>
+  );
+};
+
+export default withRouter(BookList);

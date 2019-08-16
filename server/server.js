@@ -1,41 +1,31 @@
 "use strict";
 
 const express = require("express");
-const bodyParser = require("body-parser");
-const mongo = require("./mongodb");
+const { urlencoded, json } = require("body-parser");
+const mongoose = require("mongoose");
 const app = express();
 require("dotenv").config();
-// const auth = require('./routes/auth')
-// const originUrl = "http://localhost:3000";
-const cors = require("cors");
-const mainRouter = require("./routes");
-const configMongoDB = require("./config/mongodb.config");
 
-//Auth Package
-// app.set('trust proxy', 1) // trust first proxy
-app.use(cors());
-const corsOptions = {
-  origin: originUrl,
-  optionSuccessStatus: 200
-};
+const bookRoutes = require("./routes/bookRoutes");
+const userRoutes = require("./routes/userRoutes");
 
-app.use(bodyParser.json());
-app.use(
-  bodyParser.urlencoded({
-    extended: true
-  })
-);
+app.use(urlencoded({ extended: true }));
+app.use(json());
 
 const port = process.env.PORT || 3001;
-app.use(mainRouter);
+
+app.use(bookRoutes);
+app.use(userRoutes);
 
 // start mongo connection pool, then start express app
-mongo
-  .connect("mongodb://booklist:booklist1@ds135305.mlab.com:35305/booklist")
-  .then(() => configMongoDB(app))
-  .then(() => app.listen(port))
-  .then(() => console.log(`Magic happens on port:${port}`))
-  .catch(err => {
-    console.log("no connection to db");
-    process.exit(1);
-  });
+
+mongoose
+  .connect("mongodb://booklist:booklist1@ds135305.mlab.com:35305/booklist", {
+    useNewUrlParser: true
+  })
+  .then(() =>
+    app.listen(port, () => {
+      console.log("server on port", port);
+    })
+  )
+  .catch(e => console.error(e));

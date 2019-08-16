@@ -1,15 +1,12 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-const Nav = props => {
+const Nav = () => {
   return (
-    <React.Fragment>
-      <nav
-        className="navbar navbar-expand-lg navbar-light"
-        style={{ backgroundColor: props.color }}
-      >
+    <>
+      <nav className="navbar navbar-expand-lg navbar-light">
         <NavLink className="navbar-brand" to="/">
-          {new Date().getFullYear()} BookList Tracker{" "}
+          {new Date().getFullYear()} Book Challenge
         </NavLink>
         <button
           className="navbar-toggler"
@@ -18,12 +15,11 @@ const Nav = props => {
           data-target="#navbarSupportedContent"
           aria-controls="navbarSupportedContent"
           aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
+          aria-label="Toggle navigation">
           <span className="navbar-toggler-icon" />
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <div className="navbar-nav ">
+          <div className="navbar-nav">
             <NavLink to="/book-list" className="nav-link">
               Book List
             </NavLink>
@@ -35,7 +31,7 @@ const Nav = props => {
           </div>
         </div>
       </nav>
-    </React.Fragment>
+    </>
   );
 };
 
