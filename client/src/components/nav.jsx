@@ -20,13 +20,16 @@ const Nav = () => {
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <div className="navbar-nav">
-            <NavLink to="/book-list" className="nav-link">
+            <NavLink to="/books" className="nav-link">
               Book List
             </NavLink>
             <NavLink to="/new-book" className="nav-link">
               New Book
             </NavLink>
-            {/* <NavLink to="/sign-up" className="nav-link">Sign Up</NavLink>
+            <NavLink to="/sign-up" className="nav-link text">
+              Sign Up
+            </NavLink>
+            {/* 
                         <NavLink to="/login" className="nav-link">Login</NavLink> */}
           </div>
         </div>

@@ -1,14 +1,11 @@
 import React, { useState } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { Line } from "rc-progress";
-import "react-circular-progressbar/dist/styles.css";
-import { toast } from "react-toastify";
 import { deleteBook } from "../api/books";
 
 const BookList = ({ bookList, history }) => {
   const handleDelete = book => {
     deleteBook(book);
-    toast.success("Book has been deleted");
   };
 
   const handleEdit = book => {
@@ -20,7 +17,7 @@ const BookList = ({ bookList, history }) => {
 
   return (
     <React.Fragment>
-      <div className="mr-6 bookList">
+      <div className="mr-6 container bookList">
         <h1>Book List</h1>
         <Link to="/new-book" className="btn btn-primary float-right">
           Add Book
@@ -51,7 +48,7 @@ const BookList = ({ bookList, history }) => {
                       strokeColor="#ff0000"
                       trailColor="#000000"
                     />
-                    {(book.currentPage / book.totalPages).toFixed(2) * 100}%
+                    {Math.round((book.currentPage / book.totalPages) * 100)}%
                     Completed
                   </p>
 

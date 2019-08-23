@@ -12,14 +12,71 @@ body {
   background: -o-linear-gradient(45deg, #085078 10%, #85d8ce 90%);
   background: linear-gradient(10deg, #085078 10%, #85d8ce 90%);
   height: 100%;
+  min-height: 100vh;
+  padding-bottom: 4%;
 }
+
 nav {
   font-weight: 300;
   background-color: whitesmoke;
 }
 
+.card {
+  overflow: hidden;
+}
+.homepage-heading {
+  background-color: #033f63;
+  padding: 10px;
+  border-radius: 15px;
+  display: inline-block;
+  color: #fff;
+}
+
+.challenge-options {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.btn-challenge {
+  background-color: #f7af9d;
+  box-shadow: 1px 1px 1px 1px slategrey;
+  font-size: 1.45rem;
+}
+/* .challenge-options {
+} */
+
+.homepage-quote {
+  background-color: #7c9885;
+  padding: 30px;
+}
+
+.homepage-section {
+  background-color: #f7af9d;
+  padding: 2%;
+  width: 100%;
+  top: -5%;
+  left: -5%;
+  transform: rotate(3deg);
+  margin-bottom: 2%;
+}
+
+.homepage-section:nth-child(2n) {
+  transform: rotate(-3deg);
+  background-color: #28666e;
+  color: #fff;
+}
+
+.homepage-section p {
+  padding: 5%;
+}
+
+.homepage-heading {
+  font-size: 1.3rem;
+}
+
 .bookList {
-  width: 75% !important;
   margin: 5% auto;
   box-shadow: 2px 2px 5px slategray;
   padding: 2.5%;

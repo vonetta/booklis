@@ -1,9 +1,8 @@
 const app = require("express").Router();
 const Book = require("../Schema/book");
-//get all
+
 app.get("/api/books", async (req, res) => {
   try {
-    console.log("inside book");
     const books = await Book.find({})
       .lean()
       .exec();
@@ -12,19 +11,19 @@ app.get("/api/books", async (req, res) => {
     res.status(500).send(e);
   }
 });
-//get One
+
 app.get("/api/book/:id", async (req, res) => {
   const book = req.params.id;
   try {
-    const books = await Book.findById(book)
+    const book = await Book.findById(book)
       .lean()
       .exec();
-    res.status(200).json(books);
+    res.status(200).json(book);
   } catch (e) {
     res.status(500).send(e);
   }
 });
-//create book
+
 app.post("/api/book", async (req, res) => {
   const bookToCreate = req.body.book;
   try {
@@ -35,7 +34,7 @@ app.post("/api/book", async (req, res) => {
     res.status(500).send(e);
   }
 });
-//remove book
+
 app.delete("/api/book/:id", async (req, res) => {
   const bookToDelete = req.params.id;
   try {
@@ -46,10 +45,10 @@ app.delete("/api/book/:id", async (req, res) => {
     res.status(500).send(e);
   }
 });
-//update book
 app.put("/api/book/:id", async (req, res) => {
   const bookToUpdate = req.params.id;
-  const newBookInfo = req.body.book;
+  const newBookInfo = req.body;
+  console.log(newBookInfo);
 
   try {
     const updateBook = await Book.findByIdAndUpdate(bookToUpdate, newBookInfo, {

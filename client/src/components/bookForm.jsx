@@ -2,23 +2,22 @@ import React, { useState } from "react";
 import DatePicker from "react-date-picker";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import { toast } from "react-toastify";
 import { createBook, updateBook } from "../api/books";
 
 const BookForm = props => {
-  const [editForm, setEditForm] = useState(props.history.location.state.book);
+  const [editForm, setEditForm] = useState(
+    props.history.location.state !== undefined
+      ? props.history.location.state.book
+      : ""
+  );
   const [dateStarted, setDateStarted] = useState();
 
   const formSubmission = values => {
     if (editForm) {
-      setEditForm(values);
-      updateBook(editForm);
-      toast.success("Current Book has been updated");
+      updateBook(values);
     } else {
       if (values.currentPage > values.totalPages) {
-        toast.error(
-          "Your current page can not be higher than the total pages of the book"
-        );
+        return;
       } else {
         createBook({
           bookName: values.bookName,
@@ -26,7 +25,6 @@ const BookForm = props => {
           currentPage: values.currentPage,
           dateStarted: values.dataStarted
         });
-        toast.success("New Book has been created");
       }
     }
   };
@@ -46,7 +44,7 @@ const BookForm = props => {
   const validationSchema = Yup.object().shape({
     bookName: Yup.string().required("Please Enter a Book Name"),
     currentPage: Yup.string().required(
-      "Please enter the page number you are on"
+      "Please enter the page number you are currently on"
     ),
     totalPages: Yup.string().required(
       "Please Enter total amount of pages the book has"
@@ -60,15 +58,17 @@ const BookForm = props => {
   return (
     <React.Fragment>
       <div className="container mt-5 shadow-sm p-3 mb-5 bg-white rounded">
-        <h1 className="text-center mt-3">New Book Entry</h1>
-
+        <h1 className="text-center mt-3">
+          {editForm ? `Edit ${editForm.bookName}` : "New Book Entry"}
+        </h1>
         <Formik
           initialValues={{
             _id: editForm !== undefined ? editForm._id : "",
             bookName: editForm !== undefined ? editForm.bookName : "",
             totalPages: editForm !== undefined ? editForm.totalPages : "",
             currentPage: editForm !== undefined ? editForm.currentPage : "",
-            dateStarted: editForm !== undefined ? editForm.dataStarted : ""
+            dateStarted:
+              editForm !== undefined ? editForm.dateStarted : "disabled"
           }}
           validationSchema={validationSchema}
           onSubmit={formSubmission}>
@@ -113,8 +113,23 @@ const BookForm = props => {
                 )}
               </div>
               <div className="form-group">
-                <label htmlFor="dateStarted">Date Started</label>
-                <Field component={FormikDatePicker} />
+                {editForm ? (
+                  <>
+                    <label htmlFor="dateStarted">Date Edited</label>
+                    {/* <Field component={FormikDatePicker} /> */}
+                    <Field
+                      className="form-control"
+                      value={new Date().toLocaleDateString().substr(0, 10)}
+                      disabled
+                    />
+                  </>
+                ) : (
+                  <>
+                    {" "}
+                    <label htmlFor="dateStarted">Date Started</label>
+                    <Field component={FormikDatePicker} />
+                  </>
+                )}
               </div>
               <button type="submit" className="btn btn-primary">
                 Submit

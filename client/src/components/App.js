@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Switch, Route } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import HomePage from "./HomePage";
+import Nav from "./nav";
 import BookForm from "./bookForm";
 import BookList from "./bookList";
+import NewUser from "./newUser";
+import Teams from "./Teams";
+
 // import Login from "./login";
-// import NewUserForm from "./newUser";
-import Nav from "./nav";
 import "../custom.css";
-import "react-toastify/dist/ReactToastify.css";
+
 import { getBooks } from "../api/books";
 
 const App = () => {
@@ -18,25 +20,22 @@ const App = () => {
       setBookCollection(bookList.data);
     }
     retrieveBookList();
-  }, [bookCollection]);
+  }, []);
 
   return (
     <div className="app">
       <Nav />
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={true}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnVisibilityChange
-      />
+
       <Switch>
-        <Route path="/new-book" component={BookForm} />
+        <Route path="/new-book/" component={BookForm} />
         {/* <Route path="/login" component={Login} /> */}
-        {/* <Route path="/sign-up" component={NewUserForm} /> */}
-        <Route path="/" render={() => <BookList bookList={bookCollection} />} />
+        <Route path="/sign-up" component={NewUser} />
+        <Route
+          path="/books"
+          render={() => <BookList bookList={bookCollection} />}
+        />
+        <Route path="/teams" component={Teams} />
+        <Route path="/" component={HomePage} />
       </Switch>
     </div>
   );

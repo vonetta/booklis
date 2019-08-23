@@ -1,5 +1,25 @@
 import axios from "axios";
-const url = url;
+
+const url = "https://booklist2019.herokuapp.com";
+
+export const getAllUsers = async () => {
+  try {
+    const response = await axios.get(`${url}/api/users`);
+    return onSuccess(response);
+  } catch (err) {
+    return onError(err);
+  }
+};
+
+export const getCurrentUser = async () => {
+  try {
+    const response = await axios.get(`${url}/api/user`);
+    return onSuccess(response);
+  } catch (err) {
+    return onError(err);
+  }
+};
+
 export const createUser = async ({
   firstName,
   lastName,
@@ -8,9 +28,8 @@ export const createUser = async ({
   verified,
   dateRegistered
 }) => {
-  console.log(dateRegistered);
   try {
-    const response = await axios.post(`${url}/api/users/`, {
+    const response = await axios.post(`${url}/api/user`, {
       firstName,
       lastName,
       email,
@@ -26,7 +45,7 @@ export const createUser = async ({
 
 export const loginUser = async ({ email, password }) => {
   try {
-    const response = await axios.post(`${url}/api/users/login`, {
+    const response = await axios.post(`${url}/api/user/login`, {
       email,
       password
     });

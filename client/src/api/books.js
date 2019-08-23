@@ -1,10 +1,9 @@
 import axios from "axios";
-
+const url = "https://booklist2019.herokuapp.com";
+//const url = "http://localhost:3001";
 export const getBooks = async () => {
   try {
-    const response = await axios.get(
-      `https://booklist2019.herokuapp.com/api/books`
-    );
+    const response = await axios.get(`${url}/api/books`);
     return onSuccess(response);
   } catch (err) {
     return onError(err);
@@ -13,9 +12,7 @@ export const getBooks = async () => {
 
 export const getOneBook = async book => {
   try {
-    const response = await axios.get(
-      `https://booklist2019.herokuapp.com/api/book/${book.id}`
-    );
+    const response = await axios.get(`${url}/api/books/${book.id}`);
     return onSuccess(response);
   } catch (err) {
     return onError(err);
@@ -29,15 +26,12 @@ export const createBook = async ({
   dateStarted
 }) => {
   try {
-    const response = await axios.post(
-      `https://booklist2019.herokuapp.com/api/book`,
-      {
-        bookName,
-        totalPages,
-        currentPage,
-        dateStarted
-      }
-    );
+    const response = await axios.post(`${url}/api/book`, {
+      bookName,
+      totalPages,
+      currentPage,
+      dateStarted
+    });
     return onSuccess(response);
   } catch (err) {
     return onError(err);
@@ -46,9 +40,7 @@ export const createBook = async ({
 
 export const deleteBook = async book => {
   try {
-    const response = await axios.delete(
-      `https://booklist2019.herokuapp.com/api/book/${book._id}`
-    );
+    const response = await axios.delete(`${url}/api/book/${book._id}`);
     return onSuccess(response);
   } catch (err) {
     return onError(err);
@@ -63,16 +55,13 @@ export const updateBook = async ({
   dateStarted
 }) => {
   try {
-    const response = await axios.put(
-      `https://booklist2019.herokuapp.com/api/book/${_id}`,
-      {
-        _id,
-        bookName,
-        totalPages,
-        currentPage,
-        dateStarted
-      }
-    );
+    const response = await axios.put(`${url}/api/book/${_id}`, {
+      _id,
+      bookName,
+      totalPages,
+      currentPage,
+      dateStarted
+    });
     return onSuccess(response);
   } catch (err) {
     return onError(err);
