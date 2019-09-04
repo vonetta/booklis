@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const url = "https://booklist2019.herokuapp.com";
+// const url = "https://booklist2019.herokuapp.com";
+const url = "http://localhost:3001";
 
 export const getAllUsers = async () => {
   try {
@@ -49,12 +50,14 @@ export const loginUser = async ({ email, password }) => {
       email,
       password
     });
-    return onSuccess(response.data);
+
+    return onSuccess(response);
   } catch (err) {
     return onError(err);
   }
 };
 function onSuccess(response) {
+  console.log(response);
   return response;
 }
 

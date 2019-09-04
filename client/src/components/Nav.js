@@ -29,8 +29,9 @@ const Nav = () => {
             <NavLink to="/sign-up" className="nav-link text">
               Sign Up
             </NavLink>
-            {/* 
-                        <NavLink to="/login" className="nav-link">Login</NavLink> */}
+            <NavLink to="/login" className="nav-link">
+              Login
+            </NavLink>{" "}
           </div>
         </div>
       </nav>

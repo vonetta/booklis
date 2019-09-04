@@ -1,6 +1,5 @@
 import axios from "axios";
-// const url = "https://booklist2019.herokuapp.com";
-const url = "http://localhost:3001";
+const url = "https://booklist2019.herokuapp.com";
 
 export const getTeams = async () => {
   try {
@@ -11,17 +10,21 @@ export const getTeams = async () => {
   }
 };
 
-export const createTeam = async ({ teamName, playerOne }) => {
+export const createTeam = async ({
+  teamName,
+  members: { playerName, email }
+}) => {
   try {
     const response = await axios.post(`${url}/api/team`, {
       teamName,
-      playerOne
+      members: { playerName, email }
     });
     return onSuccess(response);
   } catch (err) {
     return onError(err);
   }
 };
+
 function onSuccess(response) {
   return response;
 }

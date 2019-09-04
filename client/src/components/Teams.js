@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { getTeams } from "../api/teams";
 
 const Teams = () => {
@@ -13,21 +14,29 @@ const Teams = () => {
   }, []);
 
   return (
-    <div className="container mt-3">
+    <div className="container  mt-3">
       <h1 className="text-center">Teams</h1>
-      {teams.map((team, index) => (
-        <div key={index} className="card" style={{ width: "18rem" }}>
-          <div className="card-body">
-            <h5 className="card-title">{team.teamName}</h5>
-            {/* <h6 className="card-subtitle mb-2 text-muted">Card subtitle</h6> */}
-            <ul>
-              {team.members.map(player => (
-                <li key={player.playerName + 1}>{player.playerName}</li>
-              ))}
-            </ul>
+      <div className=" text-right">
+        <Link to="/new-team">New Team</Link>
+      </div>
+      <section className="teams-list">
+        {teams.map((team, index) => (
+          <div key={index} className="card" style={{ width: "18rem" }}>
+            <div className="card-body">
+              <h5 className="card-title team-title text-center">
+                {team.teamName}
+              </h5>
+              <ul>
+                {team.members.map(player => (
+                  <li key={player.playerName + 1}>{player.playerName}</li>
+                ))}
+              </ul>
+              <p>Total Number of Players: {teams.length + 1}</p>
+              <button>Add Member</button>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </section>
     </div>
   );
 };

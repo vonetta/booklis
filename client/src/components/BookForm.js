@@ -44,7 +44,7 @@ const BookForm = props => {
   const validationSchema = Yup.object().shape({
     bookName: Yup.string().required("Please Enter a Book Name"),
     currentPage: Yup.string().required(
-      "Please enter the page number you are currently on"
+      "Please Enter the page number you are currently on"
     ),
     totalPages: Yup.string().required(
       "Please Enter total amount of pages the book has"

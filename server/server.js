@@ -6,13 +6,15 @@ const mongoose = require("mongoose");
 const app = express();
 require("dotenv").config();
 const cors = require("cors");
+const passport = require("passport");
+
 const bookRoutes = require("./routes/bookRoutes");
 const userRoutes = require("./routes/userRoutes");
 const teamRoutes = require("./routes/teamRoutes");
 
 app.use(urlencoded({ extended: true }));
 app.use(json());
-
+app.use(passport.initialize());
 app.use(cors());
 const corsOptions = {
   origin: "http://localhost:3000",

@@ -15,6 +15,7 @@ app.get("/api/teams", async (req, res) => {
 
 app.post("/api/team", async (req, res) => {
   const teamToCreate = req.body.team;
+
   try {
     const newTeam = await Team.create(teamToCreate);
     res.status(201).json(newTeam.toJSON(newTeam));
