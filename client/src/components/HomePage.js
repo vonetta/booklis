@@ -11,7 +11,7 @@ const HomePage = () => {
         <Link to="/teams" className="btn btn-challenge">
           Teams
         </Link>
-        <Link to="/solo" className="btn btn-challenge">
+        <Link to="/sign-up" className="btn btn-challenge">
           Solo
         </Link>
       </section>

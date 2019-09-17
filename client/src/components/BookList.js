@@ -1,9 +1,28 @@
-import React from "react";
-import { Link, withRouter } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, withRouter, Redirect } from "react-router-dom";
 import { Line } from "rc-progress";
 import { deleteBook } from "../api/books";
+import { getUser } from "../utils/userStorage";
+import { getBooks } from "../api/books";
 
-const BookList = ({ bookList, history }) => {
+const BookList = ({ history }) => {
+  let [bookCollection, setBookCollection] = useState();
+
+  useEffect(() => {
+    async function retrieveBookList() {
+      const currentUser = await getUser();
+      console.log(currentUser);
+      if (currentUser !== undefined || currentUser !== null) {
+        console.log("im not undefined");
+        // const getUserBooks = await getBooks(currentUser._id);
+        // setBookCollection(getUserBooks.data);
+      } else {
+        return <Redirect to="/login" />;
+      }
+    }
+    retrieveBookList();
+  }, []);
+
   const handleDelete = book => {
     deleteBook(book);
   };
@@ -23,9 +42,9 @@ const BookList = ({ bookList, history }) => {
           Add Book
         </Link>
 
-        {bookList && (
+        {bookCollection && (
           <div className="bookItems">
-            {bookList.reverse().map((book, index) => (
+            {bookCollection.reverse().map((book, index) => (
               <div className="card" key={index}>
                 <div className="card-body">
                   <h4 className="card-title">

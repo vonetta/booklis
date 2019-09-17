@@ -1,7 +1,7 @@
-const app = require("express").Router();
+const Router = require("express").Router();
 const Team = require("../Schema/team");
 
-app.get("/api/teams", async (req, res) => {
+Router.get("/api/teams", async (req, res) => {
   try {
     const teams = await Team.find({})
       .lean()
@@ -13,7 +13,7 @@ app.get("/api/teams", async (req, res) => {
   }
 });
 
-app.post("/api/team", async (req, res) => {
+Router.post("/api/team", async (req, res) => {
   const teamToCreate = req.body.team;
 
   try {
@@ -24,4 +24,4 @@ app.post("/api/team", async (req, res) => {
   }
 });
 
-module.exports = app;
+module.exports = Router;

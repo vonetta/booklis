@@ -24,15 +24,8 @@ nav {
   background-color: whitesmoke;
 }
 
-.card {
-  overflow: hidden;
-}
-.homepage-heading {
-  background-color: #033f63;
-  padding: 10px;
-  border-radius: 15px;
-  display: inline-block;
-  color: #fff;
+#navbarSupportedContent {
+  justify-content: flex-end;
 }
 
 .challenge-options {
@@ -55,7 +48,7 @@ nav {
 
 .homepage-section {
   background-color: #f7af9d;
-  padding: 2%;
+  padding: 1.5%;
   width: 100%;
   top: -5%;
   left: -5%;
@@ -70,11 +63,16 @@ nav {
 }
 
 .homepage-section p {
-  padding: 5%;
+  padding: 3%;
 }
 
 .homepage-heading {
-  font-size: 1.3rem;
+  background-color: #033f63;
+  padding: 10px;
+  border-radius: 15px;
+  display: inline-block;
+  color: #fff;
+  font-size: 1.5rem;
 }
 
 .bookList {
@@ -106,6 +104,7 @@ nav {
 .card {
   width: 275px;
   margin: 2%;
+  overflow: hidden;
 }
 
 .card-title {

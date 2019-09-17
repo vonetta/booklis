@@ -1,9 +1,9 @@
 import axios from "axios";
-const url = "https://booklist2019.herokuapp.com";
-//const url = "http://localhost:3001";
-export const getBooks = async () => {
+// const url = "https://booklist2019.herokuapp.com";
+const url = "http://localhost:3001";
+export const getBooks = async userId => {
   try {
-    const response = await axios.get(`${url}/api/books`);
+    const response = await axios.get(`${url}/api/books?userId=${userId}`);
     return onSuccess(response);
   } catch (err) {
     return onError(err);
@@ -20,6 +20,7 @@ export const getOneBook = async book => {
 };
 
 export const createBook = async ({
+  userId,
   bookName,
   totalPages,
   currentPage,
@@ -27,6 +28,7 @@ export const createBook = async ({
 }) => {
   try {
     const response = await axios.post(`${url}/api/book`, {
+      userId,
       bookName,
       totalPages,
       currentPage,

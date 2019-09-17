@@ -1,17 +1,21 @@
 import React from "react";
+import { withRouter, Link } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
-import { createUser } from "../api/users";
 import * as Yup from "yup";
+import { getFromStorage } from "../utils/userStorage";
+import { createUser } from "../api/users";
 
-const NewUserForm = () => {
+const NewUserForm = props => {
+  let obj = getFromStorage("booklist_app");
+  console.log(obj);
+
   const formSubmission = values => {
     createUser({
-      firstName: values.firstName,
-      lastName: values.lastName,
-      email: values.email,
-      password: values.password,
-      dateRegistered: new Date()
-    });
+      firstName: values.firstName.trim(),
+      lastName: values.lastName.trim(),
+      email: values.email.trim().toLowerCase(),
+      password: values.password.trim()
+    }).then(resp => props.history.push("/login"));
   };
 
   const validationSchema = Yup.object().shape({
@@ -120,6 +124,9 @@ const NewUserForm = () => {
               <button type="submit" className="btn btn-primary">
                 Submit
               </button>
+              <p>
+                If you already have an account <Link to="/login">Login</Link>
+              </p>
             </Form>
           )}
         </Formik>
@@ -128,4 +135,4 @@ const NewUserForm = () => {
   );
 };
 
-export default NewUserForm;
+export default withRouter(NewUserForm);

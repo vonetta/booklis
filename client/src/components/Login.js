@@ -1,15 +1,19 @@
 import React from "react";
 import { loginUser } from "../api/users";
+import { withRouter } from "react-router-dom";
+import { setInStorage } from "../utils/userStorage";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 
-const Login = () => {
+const Login = props => {
   const formSubmission = async values => {
     try {
       loginUser({
         email: values.email,
         password: values.password
-      });
+      })
+        .then(token => setInStorage("booklist_app", { token: token.token }))
+        .then(redirc => props.history.push("/books"));
     } catch (err) {
       console.error(err);
     }
@@ -26,7 +30,7 @@ const Login = () => {
 
   return (
     <React.Fragment>
-      <div className="container card col-6 shadow-sm p-3 mb-5 bg-white rounded mt-5">
+      <div className="container col-6 shadow-sm p-3 mb-5 bg-white rounded mt-5">
         <h1 className="text-center">Login</h1>
         <Formik
           initialValues={{ email: "", password: "" }}
@@ -72,4 +76,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default withRouter(Login);

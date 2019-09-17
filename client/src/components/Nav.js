@@ -1,10 +1,30 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { NavLink, withRouter } from "react-router-dom";
+import { getUser, logoutCurrentUser } from "../utils/userStorage";
 
-const Nav = () => {
+const Nav = props => {
+  const [login, setLogin] = useState();
+  useEffect(() => {
+    async function getCurrentUser() {
+      const currentUser = await getUser();
+      await setLogin(currentUser);
+      if (!currentUser) {
+        props.history.push("/");
+      } else {
+        props.history.push("/books");
+      }
+    }
+    getCurrentUser();
+  }, []);
+
+  const logout = async () => {
+    await logoutCurrentUser();
+    setLogin();
+    props.history.push("/login");
+  };
   return (
     <>
-      <nav className="navbar navbar-expand-lg navbar-light">
+      <nav className="navbar navbar-expand-lg flex-column flex-md-row navbar-light">
         <NavLink className="navbar-brand" to="/">
           {new Date().getFullYear()} Book Challenge
         </NavLink>
@@ -20,18 +40,32 @@ const Nav = () => {
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <div className="navbar-nav">
-            <NavLink to="/books" className="nav-link">
-              Book List
-            </NavLink>
-            <NavLink to="/new-book" className="nav-link">
-              New Book
-            </NavLink>
-            <NavLink to="/sign-up" className="nav-link text">
-              Sign Up
-            </NavLink>
-            <NavLink to="/login" className="nav-link">
-              Login
-            </NavLink>{" "}
+            {login !== undefined && (
+              <>
+                <NavLink to="/new-book" className="nav-link">
+                  New Book
+                </NavLink>
+                <NavLink to="/books" className="nav-link">
+                  Book List
+                </NavLink>
+                <p className="nav-link">|</p>
+                <p className="nav-link"> Welcome {login.firstName} </p>
+                <p onClick={logout} className="nav-link">
+                  Logout
+                </p>
+              </>
+            )}
+
+            {!login && (
+              <>
+                <NavLink to="/sign-up" className="nav-link ">
+                  Sign Up
+                </NavLink>
+                <NavLink to="/login" className="nav-link">
+                  Login
+                </NavLink>{" "}
+              </>
+            )}
           </div>
         </div>
       </nav>
@@ -39,4 +73,4 @@ const Nav = () => {
   );
 };
 
-export default Nav;
+export default withRouter(Nav);

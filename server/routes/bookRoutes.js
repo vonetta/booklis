@@ -1,9 +1,11 @@
-const app = require("express").Router();
+const Router = require("express").Router();
 const Book = require("../Schema/book");
 
-app.get("/api/books", async (req, res) => {
+Router.get("/api/books", async (req, res) => {
   try {
-    const books = await Book.find({})
+    const { query } = req;
+    const { userId } = query;
+    const books = await Book.find({ userId: userId })
       .lean()
       .exec();
     res.status(200).json(books);
@@ -12,7 +14,7 @@ app.get("/api/books", async (req, res) => {
   }
 });
 
-app.get("/api/book/:id", async (req, res) => {
+Router.get("/api/book/:id", async (req, res) => {
   const book = req.params.id;
   try {
     const book = await Book.findById(book)
@@ -24,7 +26,7 @@ app.get("/api/book/:id", async (req, res) => {
   }
 });
 
-app.post("/api/book", async (req, res) => {
+Router.post("/api/book", async (req, res) => {
   const bookToCreate = req.body.book;
   try {
     const newBook = await Book.create(bookToCreate);
@@ -35,7 +37,7 @@ app.post("/api/book", async (req, res) => {
   }
 });
 
-app.delete("/api/book/:id", async (req, res) => {
+Router.delete("/api/book/:id", async (req, res) => {
   const bookToDelete = req.params.id;
   try {
     const removeBook = await Book.findByIdAndDelete(bookToDelete);
@@ -45,10 +47,9 @@ app.delete("/api/book/:id", async (req, res) => {
     res.status(500).send(e);
   }
 });
-app.put("/api/book/:id", async (req, res) => {
+Router.put("/api/book/:id", async (req, res) => {
   const bookToUpdate = req.params.id;
   const newBookInfo = req.body;
-  console.log(newBookInfo);
 
   try {
     const updateBook = await Book.findByIdAndUpdate(bookToUpdate, newBookInfo, {
@@ -59,4 +60,4 @@ app.put("/api/book/:id", async (req, res) => {
     res.status(500).send(e);
   }
 });
-module.exports = app;
+module.exports = Router;

@@ -1,68 +1,214 @@
-const app = require("express").Router();
+const Router = require("express").Router();
 const User = require("../Schema/user");
-const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
-const bcrypt = require("bcrypt");
-const saltRounds = 10;
-app.use(passport.initialize());
+const UserSession = require("../Schema/userSession");
 
-app.post(
-  "/api/user/login",
+Router.post("/api/account/signup", (req, res, next) => {
+  const { body } = req;
+  const { firstName, lastName, password } = body;
+  let { email } = body;
 
-  async (req, res) => {
-    console.log("inside");
-    const password = req.body.password;
-    const email = req.body.email;
-
-    passport.use(
-      new LocalStrategy(function(email, password, done) {
-        console.log(email);
-        console.log("passport");
-        const user = User.findOne({ email }, function(err, user) {
-          console.log("user");
-          if (err) return done(err);
-          if (!user) {
-            return done(null, false, { message: "Incorrect email" });
-          }
-          return done(null, "yes");
-          // const hash = user.password;
-          // bcrypt.compare(password, hash, function(err, response) {
-          //   if (response) {
-          //     console.log(response);
-          //     return done(null, user);
-          //   } else {
-          //     console.error(err);
-          //     return done(null, false, { message: "Incorrect password" });
-          //   }
-          // });
-        });
-      })
-    );
-  }
-);
-
-app.post("/api/user", (req, res) => {
-  const firstName = req.body.firstName;
-  const lastName = req.body.lastName;
-  const email = req.body.email;
-  const password = req.body.password;
-  const verified = req.body.verified;
-  const dateRegistered = req.body.dateRegistered;
-  try {
-    bcrypt.hash(password, saltRounds, async function(err, hash) {
-      const newUser = await User.create({
-        firstName,
-        lastName,
-        email,
-        password: hash,
-        verified,
-        dateRegistered
-      });
-      res.status(201).json(newUser.toJSON(newUser));
+  if (!firstName) {
+    return res.send({
+      success: false,
+      message: "Error: First name cannot be blank"
     });
-  } catch (e) {
-    res.status(500).send(e);
   }
+
+  if (!lastName) {
+    return res.send({
+      success: false,
+      message: "Error: Last name cannot be blank"
+    });
+  }
+
+  if (!email) {
+    return res.send({
+      success: false,
+      message: "Error: email cannot be blank"
+    });
+  }
+
+  if (!password) {
+    return res.send({
+      success: false,
+      message: "Error: password cannot be blank"
+    });
+  }
+
+  email = email.toLowerCase();
+
+  //Strps:
+  //1. Verify email doesnt Exist
+  //2. Save
+
+  User.find({ email }, (err, docs) => {
+    if (err) {
+      return res.status(500).send("Error: Server Error");
+    } else if (docs.length > 0) {
+      return res.status(400).send("User with this email already exist");
+    }
+    //save new user
+
+    const newUser = new User();
+    newUser.email = email;
+    newUser.firstName = firstName;
+    newUser.lastName = lastName;
+    newUser.password = newUser.generateHash(password);
+
+    newUser.save((err, user) => {
+      if (err) {
+        return res
+          .status(500)
+          .send({ success: false, message: "Error: Server error" });
+      }
+      return res.status(201).send("Signed Up");
+    });
+  });
 });
 
-module.exports = app;
+Router.post("/api/account/signin", (req, res, next) => {
+  const { body } = req;
+  const { password } = body;
+  let { email } = body;
+
+  email = email.toLowerCase();
+
+  if (!email) {
+    return res.send({
+      status: false,
+      message: "Error: Email cannot be blank"
+    });
+  }
+
+  if (!password) {
+    return res.send({
+      status: false,
+      message: "Error: Password cannot be blank"
+    });
+  }
+
+  User.find(
+    {
+      email
+    },
+    (err, users) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: "Error: server error"
+        });
+      }
+
+      if (users.length !== 1) {
+        return res.send({ success: false, message: "Error: Invalid" });
+      }
+
+      const user = users[0];
+      if (!user.validPassword(password)) {
+        return res.send({
+          success: false,
+          message: "Errors Invalid"
+        });
+      }
+
+      //otherwise correct use
+      const userSession = new UserSession();
+      userSession.userId = user._id;
+      userSession.save((err, doc) => {
+        if (err) {
+          return res.send({
+            success: false,
+            message: "Error: server error"
+          });
+        }
+        return res.status(201).send({
+          success: true,
+          message: "Valid sign in",
+          token: doc._id
+        });
+      });
+    }
+  );
+});
+
+Router.get("/api/account/verify", (req, res, next) => {
+  //Get the toekn
+  //verify token in one of a kind and not deleted
+  const { query } = req;
+  const { token } = query;
+
+  UserSession.find(
+    {
+      _id: token,
+      isDeleted: false
+    },
+    (err, sessions) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: "Error: Server error"
+        });
+      }
+
+      if (sessions.length !== 1) {
+        return res.status(400).send({
+          success: false,
+          message: "Error: Invalid more than 1 session"
+        });
+      } else {
+        return res.status(200).send({
+          success: true,
+          message: "Token set",
+          data: sessions
+        });
+      }
+    }
+  );
+});
+
+Router.get("/api/account/logout", (req, res, next) => {
+  const { query } = req;
+  const { token } = query;
+  UserSession.findOneAndUpdate(
+    {
+      _id: token,
+      isDeleted: false
+    },
+    { $set: { isDeleted: true } },
+    null,
+    (err, sessions) => {
+      if (err) {
+        return res.send({
+          status: false,
+          message: "Error: Server Error"
+        });
+      }
+
+      return res.send({
+        success: true,
+        message: "logged out"
+      });
+    }
+  );
+});
+
+Router.get("/api/currentUser", async (req, res, next) => {
+  const { query } = req;
+  const { userId } = query;
+
+  User.findById(userId)
+    .lean()
+    .exec(function(err, results) {
+      if (err) return console.error(err);
+      try {
+        res
+          .status(200)
+          .send({ success: true, message: "Recieved User", data: results });
+      } catch (error) {
+        console.error(err);
+        res.status(500).send({ success: false, message: err });
+      }
+    });
+});
+
+module.exports = Router;
