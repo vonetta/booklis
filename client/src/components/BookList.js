@@ -11,11 +11,9 @@ const BookList = ({ history }) => {
   useEffect(() => {
     async function retrieveBookList() {
       const currentUser = await getUser();
-      console.log(currentUser);
       if (currentUser !== undefined || currentUser !== null) {
-        console.log("im not undefined");
-        // const getUserBooks = await getBooks(currentUser._id);
-        // setBookCollection(getUserBooks.data);
+        const getUserBooks = await getBooks(currentUser._id);
+        setBookCollection(getUserBooks.data);
       } else {
         return <Redirect to="/login" />;
       }

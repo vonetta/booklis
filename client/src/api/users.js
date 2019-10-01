@@ -1,11 +1,10 @@
 import axios from "axios";
 
-// const url = "https://booklist2019.herokuapp.com";
-// const url = "http://localhost:3001";
+const url = "https://booklist2019.herokuapp.com";
 
 export const getAllUsers = async () => {
   try {
-    const response = await axios.get(`${process.env.DEV}/api/users`);
+    const response = await axios.get(`${url}/api/users`);
     return onSuccess(response);
   } catch (err) {
     return onError(err);
@@ -14,9 +13,7 @@ export const getAllUsers = async () => {
 
 export const getCurrentUser = async token => {
   try {
-    const response = await axios.get(
-      `${process.env.DEV}/api/currentUser?userId=${token}`
-    );
+    const response = await axios.get(`${url}/api/currentUser?userId=${token}`);
     return onSuccess(response);
   } catch (err) {
     return onError(err);
@@ -25,7 +22,7 @@ export const getCurrentUser = async token => {
 
 export const createUser = async ({ firstName, lastName, email, password }) => {
   try {
-    const response = await axios.post(`${process.env.DEV}/api/account/signup`, {
+    const response = await axios.post(`${url}/api/account/signup`, {
       firstName,
       lastName,
       email,
@@ -39,7 +36,7 @@ export const createUser = async ({ firstName, lastName, email, password }) => {
 
 export const loginUser = async ({ email, password }) => {
   try {
-    const response = await axios.post(`${process.env.DEV}/api/account/signin`, {
+    const response = await axios.post(`${url}/api/account/signin`, {
       email,
       password
     });
@@ -53,7 +50,7 @@ export const loginUser = async ({ email, password }) => {
 export const verifyUser = async ({ token }) => {
   try {
     const response = await axios.get(
-      `${process.env.DEV}/api/account/verify?token=${token}`
+      `${url}/api/account/verify?token=${token}`
     );
     return onSuccess(response);
   } catch (err) {
@@ -64,7 +61,7 @@ export const verifyUser = async ({ token }) => {
 export const logoutUser = async ({ token }) => {
   try {
     const response = await axios.get(
-      `${process.env.DEV}/api/account/logout?token=${token}`
+      `${url}/api/account/logout?token=${token}`
     );
     return onSuccess(response);
   } catch (err) {

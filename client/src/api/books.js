@@ -1,6 +1,5 @@
 import axios from "axios";
-// const url = "https://booklist2019.herokuapp.com";
-const url = "http://localhost:3001";
+const url = "https://booklist2019.herokuapp.com";
 export const getBooks = async userId => {
   try {
     const response = await axios.get(`${url}/api/books?userId=${userId}`);

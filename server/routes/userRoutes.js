@@ -132,8 +132,6 @@ Router.post("/api/account/signin", (req, res, next) => {
 });
 
 Router.get("/api/account/verify", (req, res, next) => {
-  //Get the toekn
-  //verify token in one of a kind and not deleted
   const { query } = req;
   const { token } = query;
 
