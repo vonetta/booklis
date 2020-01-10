@@ -9,14 +9,16 @@ const BookList = ({ history }) => {
   let [bookCollection, setBookCollection] = useState();
 
   useEffect(() => {
-    async function retrieveBookList() {
-      const currentUser = await getUser();
-      if (currentUser !== undefined || currentUser !== null) {
-        const getUserBooks = await getBooks(currentUser._id);
-        setBookCollection(getUserBooks.data);
-      } else {
-        return <Redirect to="/login" />;
-      }
+    function retrieveBookList() {
+      getUser().then(data => {
+        if (data !== undefined || data !== null) {
+          getBooks(data._id).then(userBooks =>
+            setBookCollection(userBooks.data)
+          );
+        } else {
+          return <Redirect to="/login" />;
+        }
+      });
     }
     retrieveBookList();
   }, []);
@@ -39,7 +41,7 @@ const BookList = ({ history }) => {
         <Link to="/new-book" className="btn btn-primary float-right">
           Add Book
         </Link>
-
+        {!bookCollection && <div>Loading</div>}
         {bookCollection && (
           <div className="bookItems">
             {bookCollection.reverse().map((book, index) => (
@@ -72,13 +74,15 @@ const BookList = ({ history }) => {
                   <button
                     href="#"
                     className="card-link btn btn-warning"
-                    onClick={() => handleEdit(book)}>
+                    onClick={() => handleEdit(book)}
+                  >
                     Edit
                   </button>
                   <button
                     href="#"
                     className="card-link btn btn-danger"
-                    onClick={() => handleDelete(book)}>
+                    onClick={() => handleDelete(book)}
+                  >
                     Delete
                   </button>
                 </div>

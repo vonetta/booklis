@@ -13,7 +13,7 @@ const Login = props => {
         password: values.password
       })
         .then(token => setInStorage("booklist_app", { token: token.token }))
-        .then(redirc => props.history.push("/books"));
+        .then(() => props.history.go("/books"));
     } catch (err) {
       console.error(err);
     }
@@ -35,7 +35,8 @@ const Login = props => {
         <Formik
           initialValues={{ email: "", password: "" }}
           validationSchema={validationSchema}
-          onSubmit={formSubmission}>
+          onSubmit={formSubmission}
+        >
           {({ errors, touched, handleBlur }) => (
             <Form className="m-2">
               <div className="form-group">
