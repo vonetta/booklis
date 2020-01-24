@@ -11,38 +11,24 @@ const BookForm = props => {
       ? props.history.location.state.book
       : ""
   );
-  const [dateStarted, setDateStarted] = useState();
 
   const formSubmission = values => {
     if (editForm) {
       updateBook(values);
     } else {
-      const obj = getFromStorage("boolist_app");
+      const obj = getFromStorage("booklist_app");
+      console.log(obj);
       if (values.currentPage > values.totalPages) {
         return;
       } else {
-        debugger;
         createBook({
           userId: obj.token,
           bookName: values.bookName,
           totalPages: values.totalPages,
-          currentPage: values.currentPage,
-          dateStarted: values.dataStarted
+          currentPage: values.currentPage
         });
       }
     }
-  };
-
-  const FormikDatePicker = ({ name, value }) => {
-    return (
-      <DatePicker
-        id="dateStarted"
-        name="dateStarted"
-        className="form-control"
-        onChange={onChange}
-        maxDate={new Date()}
-      />
-    );
   };
 
   const validationSchema = Yup.object().shape({
@@ -55,10 +41,6 @@ const BookForm = props => {
     )
   });
 
-  const onChange = date => {
-    setDateStarted(date);
-  };
-
   return (
     <React.Fragment>
       <div className="container mt-5 shadow-sm p-3 mb-5 bg-white rounded">
@@ -70,12 +52,11 @@ const BookForm = props => {
             _id: editForm !== undefined ? editForm._id : "",
             bookName: editForm !== undefined ? editForm.bookName : "",
             totalPages: editForm !== undefined ? editForm.totalPages : "",
-            currentPage: editForm !== undefined ? editForm.currentPage : "",
-            dateStarted:
-              editForm !== undefined ? editForm.dateStarted : "disabled"
+            currentPage: editForm !== undefined ? editForm.currentPage : ""
           }}
           validationSchema={validationSchema}
-          onSubmit={formSubmission}>
+          onSubmit={formSubmission}
+        >
           {({ values, errors, touched, handleBlur }) => (
             <Form className="m-2 card-body">
               <div className="form-group">
@@ -114,25 +95,6 @@ const BookForm = props => {
                 />
                 {errors.totalPages && touched.totalPages && (
                   <div className="alert alert-danger">{errors.totalPages}</div>
-                )}
-              </div>
-              <div className="form-group">
-                {editForm ? (
-                  <>
-                    <label htmlFor="dateStarted">Date Edited</label>
-                    {/* <Field component={FormikDatePicker} /> */}
-                    <Field
-                      className="form-control"
-                      value={new Date().toLocaleDateString().substr(0, 10)}
-                      disabled
-                    />
-                  </>
-                ) : (
-                  <>
-                    {" "}
-                    <label htmlFor="dateStarted">Date Started</label>
-                    <Field component={FormikDatePicker} />
-                  </>
                 )}
               </div>
               <button type="submit" className="btn btn-primary">

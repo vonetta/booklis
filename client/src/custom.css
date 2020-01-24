@@ -28,6 +28,10 @@ nav {
   justify-content: flex-end;
 }
 
+.nav-link {
+  font-size: 1.1rem;
+}
+
 .challenge-options {
   display: flex;
   justify-content: space-around;
@@ -63,7 +67,8 @@ nav {
 }
 
 .homepage-section p {
-  padding: 3%;
+  padding: 1.5%;
+  font-size: 1.3rem;
 }
 
 .homepage-heading {

@@ -2,13 +2,28 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const HomePage = () => {
+  const daysCountDown = () => {
+    const today = new Date();
+    var newYear = new Date(today.getFullYear(), 11, 31);
+    if (today.getMonth() === 11 && today.getDate() > 25) {
+      newYear.setFullYear(newYear.getFullYear() + 1);
+    }
+    var one_day = 1000 * 60 * 60 * 24;
+
+    return (
+      Math.ceil((newYear.getTime() - today.getTime()) / one_day) +
+      " days left in this challenge!"
+    );
+  };
+
   return (
     <div>
       <h2 className="text-center m-4">
         Welcome to {new Date().getFullYear()} Booklist Challenge
       </h2>
+      <h4 className="text-center"> {daysCountDown()}</h4>
       <section className="challenge-options">
-        <Link to="/teams" className="btn btn-challenge">
+        <Link to="/teams" className="btn btn-challenge disabled">
           Teams
         </Link>
         <Link to="/sign-up" className="btn btn-challenge">
@@ -18,10 +33,7 @@ const HomePage = () => {
       <section className=" m-auto card p-5 w-75">
         <section className="homepage-section">
           <h4 className="homepage-heading">Challenge:</h4>
-          <p>
-            The Booklist Challenge is a challenge to see who can read 10 or more
-            books in one year.{" "}
-          </p>
+          <p>To see who can read the most books in one year. </p>
         </section>
 
         <section className="homepage-section">
@@ -35,8 +47,8 @@ const HomePage = () => {
             <li>Do Not Lie about completion</li>
           </ol>
           <p>
-            If you do not complete 10 books dont beat yourself up. Just try to
-            increase it next year.
+            If you do not like the number of books you finished at the end of
+            the year do not beat yourself up. Just try to increase it next year.
           </p>
         </section>
         <section className="homepage-section">
@@ -56,19 +68,25 @@ const HomePage = () => {
         <section className="homepage-section">
           <h4 className="homepage-heading">Inspiration:</h4>
           <p>
-            So I told myself if I want to be successful I have to do what
-            successful people do: So I started a challenge with my some family
-            and friends to kind of motivate us to start reading and making it a
-            habit. Growing up I have always heard the quote:
+            To be somewhere you have never been you have to do something you
+            have never done. I told myself if I want to be successful I have to
+            do what successful people do.
           </p>
+          <p>
+            One successful way for me (personally) to build a habit is to make
+            it a competition. So I started a challenge with some family and
+            friends to build a habit of reading more often and not because of
+            school or work but in our spare time.
+          </p>
+          <p>Growing up I have always heard the quote:</p>
           <blockquote className="homepage-quote text-center">
             "If you don’t want them to know something, put it in a book, they’ll
             never read it."
           </blockquote>{" "}
           <p>
-            This quote has always made me. So I am challenge myself and anyone
-            else who wants to join in trying to read a minimum of 10 books in
-            one calendar year.
+            This quote has always kept me on my toes. So I am challenging myself
+            and anyone else who wants to join in trying to start keeping a log
+            of how many books you read in one calendar year.
           </p>
         </section>
       </section>

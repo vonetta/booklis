@@ -27,6 +27,7 @@ Router.get("/api/book/:id", async (req, res) => {
 });
 
 Router.post("/api/book", async (req, res) => {
+  console.log(req.body);
   const bookToCreate = req.body.book;
   try {
     const newBook = await Book.create(bookToCreate);

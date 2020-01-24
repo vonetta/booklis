@@ -22,19 +22,18 @@ export const createBook = async ({
   userId,
   bookName,
   totalPages,
-  currentPage,
-  dateStarted
+  currentPage
 }) => {
   try {
     const response = await axios.post(`${url}/api/book`, {
       userId,
       bookName,
       totalPages,
-      currentPage,
-      dateStarted
+      currentPage
     });
     return onSuccess(response);
   } catch (err) {
+    console.log("api error");
     return onError(err);
   }
 };
@@ -74,5 +73,6 @@ function onSuccess(response) {
 }
 
 function onError(err) {
+  console.log(err);
   return Promise.reject(err.data);
 }

@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 
 const bookSchema = new mongoose.Schema(
   {
+    userId: {
+      type: String
+    },
     bookName: {
       type: String,
       required: true
@@ -13,9 +16,6 @@ const bookSchema = new mongoose.Schema(
     currentPage: {
       type: Number,
       required: true
-    },
-    dateStarted: {
-      type: Date
     }
   },
   { timestamps: true }
